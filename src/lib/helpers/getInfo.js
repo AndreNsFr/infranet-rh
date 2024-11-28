@@ -52,7 +52,7 @@ class GetInfo {
             return response.json();
         }).then(response => {
             if (response) {
-                
+
                 const { nome, departamento, email, cpf, erro } = response
 
                 if (erro) {
@@ -78,6 +78,15 @@ class GetInfo {
 
         return this.info
 
+    }
+
+    async GetAllStaffs() {
+        await fetch("http://localhost:3000/staff").then((response) => {
+            return response.json();
+        }).then((response) => {
+            return this.info = response 
+        }).catch((error) => { console.log(error) })
+        return this.info
     }
 
 }
