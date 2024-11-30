@@ -1,5 +1,6 @@
 <script lang="js">
     import GetInfo from "$lib/helpers/getInfo.js";
+    import Funcionarios from "./Funcionarios.svelte";
     const getinfo = new GetInfo();
 
     // TODO: fazer aparecer pelomenos um valor retornado do Json do Show();
@@ -16,11 +17,17 @@
             Primeiro_nome = x.nome.split(" ")[0];
             return Primeiro_nome;
         });
+
+    let status_Funcionario = false;
+    function MostrarFuncionarios() {
+        status_Funcionario = true;
+    }
+
+    function tirar() {
+        status_Funcionario = false;
+    }
+
     // colocar load();
-    getinfo.GetAllStaffs().then((staff) => {
-        funcionarios = staff;
-        return (funcionarios = staff);
-    });
 </script>
 
 <main>
@@ -28,12 +35,15 @@
         <h3>
             seja bem vindo {Primeiro_nome}
         </h3>
+
+        <button on:click={MostrarFuncionarios}>Funcionarios</button> <br />
+        <button on:click={tirar}>tirar Funcionarios (teste)</button>
     </aside>
 
     <section>
-        {#each funcionarios as funcionario}
-            <input type="text" value={funcionario.nome} />
-        {/each}
+        {#if status_Funcionario}
+            <Funcionarios></Funcionarios>
+        {/if}
     </section>
 </main>
 
@@ -55,11 +65,7 @@
     }
 
     section {
-        display: grid;
-        width: 90%;
-        gap: 15px;
+        width: 100%;
         margin: 15px;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
     }
 </style>

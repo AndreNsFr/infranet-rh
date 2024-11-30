@@ -68,8 +68,6 @@ class GetInfo {
     }
 
     async Show() {
-
-
         const cpf = Cookies.get('cpf')
 
         await this.#Get(cpf).then((data) => {
