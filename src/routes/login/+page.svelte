@@ -1,5 +1,6 @@
 <script lang="js">
     import GetInfo from "$lib/helpers/getInfo.js";
+    import Configs from "./Configs.svelte";
     import Funcionarios from "./Funcionarios.svelte";
     const getinfo = new GetInfo();
 
@@ -18,15 +19,18 @@
             return Primeiro_nome;
         });
 
-    let status_Funcionario = false;
-    function MostrarFuncionarios() {
+    let status_Funcionario = true;
+    let status_Profile = false;
+
+    function mostrar_funcionarios() {
         status_Funcionario = true;
+        status_Profile = false;
     }
 
-    function tirar() {
+    function mostrar_configurações_perfil() {
         status_Funcionario = false;
+        status_Profile = true;
     }
-
     // colocar load();
 </script>
 
@@ -36,20 +40,25 @@
             seja bem vindo {Primeiro_nome}
         </h3>
 
-        <button on:click={MostrarFuncionarios}>Funcionarios</button> <br />
-        <button on:click={tirar}>tirar Funcionarios (teste)</button>
+        <button on:click={mostrar_funcionarios}>Funcionarios</button> <br />
+        <button on:click={mostrar_configurações_perfil}
+            >Configurações de Perfil</button
+        >
     </aside>
 
     <section>
         {#if status_Funcionario}
             <Funcionarios></Funcionarios>
         {/if}
+        {#if status_Profile}
+            <Configs></Configs>
+        {/if}
     </section>
 </main>
 
 <style>
     main {
-        background-color: tomato;
+        background-color: rgb(63, 191, 241);
         height: 100vh;
         display: flex;
     }
