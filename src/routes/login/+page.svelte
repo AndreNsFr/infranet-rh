@@ -23,6 +23,7 @@
     let status_Profile = false;
 
     function mostrar_funcionarios() {
+        
         status_Funcionario = true;
         status_Profile = false;
     }
@@ -31,7 +32,7 @@
         status_Funcionario = false;
         status_Profile = true;
     }
-    // colocar load();
+    
 </script>
 
 <main>

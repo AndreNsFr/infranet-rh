@@ -94,34 +94,35 @@ class GetInfo {
         if (!imagem) {
             return "";
         }
-    
+
         return new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-    
-        fileReader.onload = () => {
-            resolve(fileReader.result); // Resolve com o resultado Base64
-        };
-    
-        fileReader.onerror = (error) => {
-            reject(error); // Rejeita caso ocorra algum erro
-        };
-    
-          fileReader.readAsDataURL(imagem); // Lê a imagem como DataURL
+            const fileReader = new FileReader();
+
+            fileReader.onload = () => {
+                resolve(fileReader.result); // Resolve com o resultado Base64
+            };
+
+            fileReader.onerror = (error) => {
+                reject(error); // Rejeita caso ocorra algum erro
+            };
+
+            fileReader.readAsDataURL(imagem); // Lê a imagem como DataURL
         });
     }
 
-    async updateSelfInfo(cpf, nome, email, imagem, senha) {
+
+    async updateInfo(cpf, nome, email, imagem, senha, departamento) {
 
 
         const imagem64 = await this.toBase64(imagem)
-        console.log(imagem64)
 
 
         let NewData = {
             nome: nome,
             email: email,
             imagem: imagem64,
-            senha: senha
+            senha: senha,
+            departamento: departamento
         }
 
         let sanitized_data = {}
@@ -132,7 +133,7 @@ class GetInfo {
             }
         }
 
-        
+
 
         try {
             await fetch(`http://localhost:3000/?cpf=${cpf}`, {

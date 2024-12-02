@@ -62,7 +62,7 @@
         background-color: tomato;
         width: 100%;
         min-height: 100vh;
-        background: url(../sorces/background-login.jpg);
+        background: url(/background-login.jpg);
         background-size: cover;
         background-repeat: no-repeat;
     }

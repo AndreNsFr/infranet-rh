@@ -3,24 +3,29 @@
 
     const getInfo = new GetInfo();
 
-    let configs = {};
+    // uso de props
 
-    getInfo.Show().then((data) => {
-        configs = data;
-        return configs;
-    });
+    export let specific_data;
+
+    export let voltar;
+
+    let configs = specific_data;
 
     function sendNewData(event) {
         event.preventDefault();
+        voltar();
 
         const cpf = configs.cpf;
 
         let nome = document.getElementById("nome").value;
         let email = document.getElementById("email").value;
         let senha = document.getElementById("senha").value;
+        let departamento = document.getElementById("departamento").value;
         let imagem = document.getElementById("imagem").files[0];
 
-        getInfo.updateInfo(cpf, nome, email, imagem, senha).then();
+        getInfo
+            .updateInfo(cpf, nome, email, imagem, senha, departamento)
+            .then();
     }
 
     let imagem_status = false;
@@ -39,13 +44,16 @@
     }
 </script>
 
-<div class="configurações">
-    <div class="seus-dados">
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+<img id="icon-voltar" src="/voltar.png" alt="voltar" on:click={voltar} />
+<div class="gerenciador_de_dados">
+    <div class="dados-funcionario">
         <img
             src={configs.imagem}
             width="200px"
             height="200px"
-            alt="imagem-pessoal"
+            alt="imagem-do-funcionario"
             style="border-radius: 900px;"
         />
         <h3>Nome:</h3>
@@ -61,7 +69,7 @@
     </div>
 
     <form on:submit={sendNewData(event)}>
-        <h1>Alterar suas informações:</h1>
+        <h1>Alterar informações:</h1>
         <br />
         <br />
         <label for="nome">Alterar nome:</label>
@@ -75,12 +83,21 @@
         <label for="senha">Alterar senha:</label>
         <input type="password" name="senha" id="senha" placeholder="senha" />
         <label for="email">Alterar email:</label>
+
         <input
             type="email"
             name="email"
             id="email"
             placeholder="email"
             value={configs.email}
+        />
+        <label for="departamento">Alterar departamento:</label>
+        <input
+            type="text"
+            name="departamento"
+            id="departamento"
+            placeholder="departamento"
+            value={configs.departamento}
         />
         <div class="env-img">
             <label for="imagem">Alterar imagem:</label>
@@ -104,17 +121,27 @@
                 />
             {/if}
         </div>
+
         <input type="submit" value="enviar" />
     </form>
 </div>
 
 <style>
-    .configurações {
+    .gerenciador_de_dados {
         display: flex;
-
         gap: 15px;
         height: 100%;
     }
+
+    #icon-voltar {
+        top: 50px;
+        right: 25px;
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        cursor: pointer;
+    }
+
     form {
         display: flex;
         flex-direction: column;
@@ -163,7 +190,7 @@
         font-size: larger;
     }
 
-    .seus-dados {
+    .dados-funcionario {
         border-radius: 15px;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.808);
         display: flex;
@@ -177,7 +204,7 @@
         align-items: center;
     }
 
-    .seus-dados > h3 {
+    .dados-funcionario > h3 {
         margin: 3px;
     }
 </style>
