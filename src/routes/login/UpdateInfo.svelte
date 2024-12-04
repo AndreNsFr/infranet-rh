@@ -9,13 +9,17 @@
 
     export let voltar;
 
-    let configs = specific_data;
+    let staff_data = specific_data;
+
+    function DeleteStaffs(cpf) {
+        getInfo.deleteStaff(cpf).then();
+    }
 
     function sendNewData(event) {
         event.preventDefault();
         voltar();
 
-        const cpf = configs.cpf;
+        const cpf = staff_data.cpf;
 
         let nome = document.getElementById("nome").value;
         let email = document.getElementById("email").value;
@@ -50,22 +54,30 @@
 <div class="gerenciador_de_dados">
     <div class="dados-funcionario">
         <img
-            src={configs.imagem}
+            src={staff_data.imagem}
             width="200px"
             height="200px"
             alt="imagem-do-funcionario"
             style="border-radius: 900px;"
         />
         <h3>Nome:</h3>
-        <span>{configs.nome}</span>
+        <span>{staff_data.nome}</span>
         <h3>Departamento:</h3>
-        <span>{configs.departamento}</span>
+        <span>{staff_data.departamento}</span>
         <h3>Data de Nascimento:</h3>
-        <span>{configs.data}</span>
+        <span>{staff_data.data}</span>
         <h3>Email:</h3>
-        <span>{configs.email}</span>
+        <span>{staff_data.email}</span>
         <h3>Cpf:</h3>
-        <span>{configs.cpf}</span>
+        <span>{staff_data.cpf}</span>
+        <!-- svelte-ignore a11y_click_events_have_key_events -->
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+        <img
+            src="lixo.png"
+            id="icon-lixo"
+            alt=""
+            on:click={(DeleteStaffs(staff_data.cpf), voltar)}
+        />
     </div>
 
     <form on:submit={sendNewData(event)}>
@@ -78,7 +90,7 @@
             name="nome"
             id="nome"
             placeholder="nome"
-            value={configs.nome}
+            value={staff_data.nome}
         />
         <label for="senha">Alterar senha:</label>
         <input type="password" name="senha" id="senha" placeholder="senha" />
@@ -89,7 +101,7 @@
             name="email"
             id="email"
             placeholder="email"
-            value={configs.email}
+            value={staff_data.email}
         />
         <label for="departamento">Alterar departamento:</label>
         <input
@@ -97,7 +109,7 @@
             name="departamento"
             id="departamento"
             placeholder="departamento"
-            value={configs.departamento}
+            value={staff_data.departamento}
         />
         <div class="env-img">
             <label for="imagem">Alterar imagem:</label>
@@ -139,6 +151,12 @@
         width: 50px;
         height: 50px;
         position: absolute;
+        cursor: pointer;
+    }
+
+    #icon-lixo {
+        width: 50px;
+        margin: auto;
         cursor: pointer;
     }
 

@@ -154,6 +154,23 @@ class GetInfo {
 
     }
 
+    async deleteStaff(cpf) {
+        try {
+            await fetch(`http://localhost:3000/?cpf=${cpf}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+            }).then((response) => {
+                return response.JSON();
+            }).then((data) => {
+                console.log(data)
+            }).catch((error) => {
+                console.error(error)
+            })
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 }
 
 export default GetInfo

@@ -1,7 +1,8 @@
 <script lang="js">
     import GetInfo from "$lib/helpers/getInfo.js";
-    import Configs from "./Configs.svelte";
+    import Configs from "./ProfileConfigs.svelte";
     import Funcionarios from "./Funcionarios.svelte";
+    import ProfileConfigs from "./ProfileConfigs.svelte";
     const getinfo = new GetInfo();
 
     // TODO: fazer aparecer pelomenos um valor retornado do Json do Show();
@@ -23,7 +24,6 @@
     let status_Profile = false;
 
     function mostrar_funcionarios() {
-        
         status_Funcionario = true;
         status_Profile = false;
     }
@@ -32,7 +32,6 @@
         status_Funcionario = false;
         status_Profile = true;
     }
-    
 </script>
 
 <main>
@@ -52,7 +51,7 @@
             <Funcionarios></Funcionarios>
         {/if}
         {#if status_Profile}
-            <Configs></Configs>
+            <ProfileConfigs></ProfileConfigs>
         {/if}
     </section>
 </main>
