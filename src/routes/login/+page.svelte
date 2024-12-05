@@ -1,6 +1,6 @@
 <script lang="js">
     import GetInfo from "$lib/helpers/getInfo.js";
-    import Configs from "./ProfileConfigs.svelte";
+    import CreateStaff from "./CreateStaff.svelte";
     import Funcionarios from "./Funcionarios.svelte";
     import ProfileConfigs from "./ProfileConfigs.svelte";
     const getinfo = new GetInfo();
@@ -22,15 +22,24 @@
 
     let status_Funcionario = true;
     let status_Profile = false;
+    let status_Criar_funcionario = false;
 
     function mostrar_funcionarios() {
         status_Funcionario = true;
+        status_Criar_funcionario = false;
         status_Profile = false;
     }
 
     function mostrar_configurações_perfil() {
-        status_Funcionario = false;
         status_Profile = true;
+        status_Funcionario = false;
+        status_Criar_funcionario = false;
+    }
+
+    function mostrar_criar_funcionarios() {
+        status_Criar_funcionario = true;
+        status_Profile = false;
+        status_Funcionario = false;
     }
 </script>
 
@@ -43,6 +52,8 @@
         <button on:click={mostrar_funcionarios}>Funcionarios</button> <br />
         <button on:click={mostrar_configurações_perfil}
             >Configurações de Perfil</button
+        ><br />
+        <button on:click={mostrar_criar_funcionarios}>Criar funcionarios</button
         >
     </aside>
 
@@ -52,6 +63,9 @@
         {/if}
         {#if status_Profile}
             <ProfileConfigs></ProfileConfigs>
+        {/if}
+        {#if status_Criar_funcionario}
+            <CreateStaff></CreateStaff>
         {/if}
     </section>
 </main>

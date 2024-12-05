@@ -171,6 +171,37 @@ class GetInfo {
         }
     }
 
+
+    async createStaff(nome, senha, departamento, cpf, email, data_nas, imagem) {
+
+        const imagem64 = await this.toBase64(imagem)
+
+
+        try {
+            fetch("http://localhost:3000/", {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify({
+                    nome: nome,
+                    senha: senha,
+                    departamento: departamento,
+                    cpf: cpf,
+                    data: data_nas,
+                    email: email,
+                    imagem: imagem64
+                })
+            }).then((response) => {
+                return response.json()
+            }).then((data) => {
+                alert(data.status)
+            }).catch((erro) => {
+                console.log({ error: erro })
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 }
 
 export default GetInfo

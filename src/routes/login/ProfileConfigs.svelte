@@ -111,7 +111,6 @@
 <style>
     .configurações {
         display: flex;
-
         gap: 15px;
         height: 100%;
     }
