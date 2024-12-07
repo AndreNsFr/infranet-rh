@@ -20,7 +20,16 @@
         let senha = document.getElementById("senha").value;
         let imagem = document.getElementById("imagem").files[0];
 
-        getInfo.updateInfo(cpf, nome, email, imagem, senha).then();
+        getInfo
+            .VerifyActions()
+            .then((Response) => {
+                if (Response) {
+                    getInfo.UpdateInfo(cpf, nome, email, imagem, senha).then();
+                }
+            })
+            .catch((erro) => {
+                console.error(erro);
+            });
     }
 
     let imagem_status = false;

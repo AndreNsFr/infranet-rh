@@ -12,7 +12,24 @@
     let staff_data = specific_data;
 
     function DeleteStaffs(cpf) {
-        getInfo.deleteStaff(cpf).then();
+        let confirmar = confirm(
+            "Este funcionario será excluido, tem certeza disto?",
+        );
+
+        if (confirmar) {
+            getInfo
+                .VerifyActions()
+                .then((response) => {
+                    if (response) {
+                        getInfo
+                            .DeleteStaff(cpf)
+                            .then(alert("funcionario removido com sucesso"));
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                });
+        }
     }
 
     function sendNewData(event) {
@@ -28,7 +45,7 @@
         let imagem = document.getElementById("imagem").files[0];
 
         getInfo
-            .updateInfo(cpf, nome, email, imagem, senha, departamento)
+            .UpdateInfo(cpf, nome, email, imagem, senha, departamento)
             .then();
     }
 

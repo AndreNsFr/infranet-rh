@@ -3,7 +3,7 @@
     import Cookie from "js-cookie";
     import { goto } from "$app/navigation";
 
-    const get_info = new GetInfo();
+    const getInfo = new GetInfo();
 
     function contato(event) {
         event.preventDefault();
@@ -11,7 +11,7 @@
         const cpf = document.getElementById("cpf").value;
         const senha = document.getElementById("senha").value;
 
-        get_info.connect(email, cpf, senha);
+        getInfo.Login(email, cpf, senha);
     }
 </script>
 

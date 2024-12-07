@@ -17,7 +17,7 @@
         const imagem = document.getElementById("imagem").files[0];
 
         getInfo
-            .createStaff(
+            .CreateStaff(
                 nome,
                 senha,
                 departamento,

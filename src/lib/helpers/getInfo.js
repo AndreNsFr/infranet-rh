@@ -10,7 +10,7 @@ class GetInfo {
         this.info = null
     }
 
-    connect(email, cpf, senha) {
+    Login(email, cpf, senha) {
         fetch("http://localhost:3000/auth", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -111,7 +111,7 @@ class GetInfo {
     }
 
 
-    async updateInfo(cpf, nome, email, imagem, senha, departamento) {
+    async UpdateInfo(cpf, nome, email, imagem, senha, departamento) {
 
 
         const imagem64 = await this.toBase64(imagem)
@@ -154,25 +154,26 @@ class GetInfo {
 
     }
 
-    async deleteStaff(cpf) {
+    async DeleteStaff(cpf) {
         try {
             await fetch(`http://localhost:3000/?cpf=${cpf}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" },
             }).then((response) => {
-                return response.JSON();
+                return response.json();
             }).then((data) => {
-                console.log(data)
+                //! para testes (basta descomentar):
+                //console.log(data.status)
             }).catch((error) => {
-                console.error(error)
+                console.log(error)
             })
         } catch (error) {
-            console.error(error)
+            console.error(error.erro)
         }
     }
 
 
-    async createStaff(nome, senha, departamento, cpf, email, data_nas, imagem) {
+    async CreateStaff(nome, senha, departamento, cpf, email, data_nas, imagem) {
 
         const imagem64 = await this.toBase64(imagem)
 
@@ -200,6 +201,46 @@ class GetInfo {
         } catch (error) {
             console.log(error)
         }
+    }
+
+    async VerifyActions() {
+
+        // ? teoricamente isso ta funcionando, basta testar
+
+        let senha = prompt(
+            "Esta alteração será aplicada, você tem certeza ? \n \n Digite a sua senha:",
+        );
+
+        const cpf = Cookies.get("cpf")
+
+        let email = null
+
+        await this.Show(cpf).then((response) => {
+            return email = response.email
+        })
+
+
+        await fetch("http://localhost:3000/auth", {
+            method: "post",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify({ email: email, senha: senha, cpf: cpf })
+        }).then((response) => {
+            return response.json()
+        }).then((data) => {
+            if ((data.token && data.refreshToken) && !(data === "a senha precisa de no minimo 8 cacateres")) {
+                return this.info = true
+            } else if (data === "a senha precisa de no minimo 8 cacateres" && !(data.token && data.refreshToken)) {
+                alert(data)
+                return this.info = false
+            } else {
+                alert("senha incorreta")
+                return this.info = false
+            }
+        }).catch((error) => {
+            return console.error(error)
+        })
+
+        return this.info
     }
 
 }
