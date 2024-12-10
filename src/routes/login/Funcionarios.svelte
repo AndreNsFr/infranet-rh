@@ -7,7 +7,6 @@
     let funcionarios = null;
 
     getinfo.GetAllStaffs().then((staff) => {
-        funcionarios = staff;
         return (funcionarios = staff);
     });
 

@@ -8,6 +8,8 @@ class GetInfo {
 
     constructor() {
         this.info = null
+        this.token = Cookies.get("token")
+        this.refreshToken = Cookies.get("refreshToken")
     }
 
     Login(email, cpf, senha) {
@@ -19,7 +21,7 @@ class GetInfo {
             .then((response) => response.json())
             .then((data) => {
                 const { token, refreshToken } = data;
-                Cookies.set("token", `${token}`, { expires: 1, path: "/" });
+                Cookies.set("token", `${token}`, { expires: 60 / (24 * 60), path: "/" });
                 Cookies.set("refreshToken", `${refreshToken}`, {
                     expires: 1,
                     path: "/",
@@ -49,7 +51,20 @@ class GetInfo {
     }
 
     async  #Get(cpf) {
-        await fetch(`http://localhost:3000/?cpf=${cpf}`).then(response => {
+        await fetch(`http://localhost:3000/?cpf=${cpf}`, {
+            headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
+        }).then(response => {
+
+            const token = response.headers.get("token");
+            const refreshToken = response.headers.get("refreshToken");
+
+            if (token !== null && refreshToken !== null) {
+                Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
+                Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                return response.json();
+            }
+
+
             return response.json();
         }).then(response => {
             if (response) {
@@ -81,11 +96,29 @@ class GetInfo {
     }
 
     async GetAllStaffs() {
-        await fetch("http://localhost:3000/staff").then((response) => {
-            return response.json();
+
+
+        await fetch("http://localhost:3000/staff", {
+            headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then((response) => {
+
+            const token = response.headers.get("token");
+            const refreshToken = response.headers.get("refreshToken");
+
+            if (token !== null && refreshToken !== null) {
+                Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
+                Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                return response.json();
+            }
+
+            return response.json();
+
+        }).then(async (response) => {
+
             return this.info = response
+
         }).catch((error) => { console.log(error) })
+
         return this.info
     }
 
@@ -138,12 +171,24 @@ class GetInfo {
         try {
             await fetch(`http://localhost:3000/?cpf=${cpf}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify(sanitized_data)
             }).then((response) => {
+
+                const token = response.headers.get("token");
+                const refreshToken = response.headers.get("refreshToken");
+
+                if (token !== null && refreshToken !== null) {
+                    Cookies.set("token", token, { expires: 1, path: "/" })
+                    Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                    return response.json();
+                }
+
+
+
                 return response.json()
             }).then((data_retornada) => {
-                console.log("data retornada: ", data_retornada)
+                // console.log("data retornada: ", data_retornada)
             }).catch((error) => {
                 console.log(error)
             })
@@ -158,8 +203,19 @@ class GetInfo {
         try {
             await fetch(`http://localhost:3000/?cpf=${cpf}`, {
                 method: "DELETE",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
             }).then((response) => {
+
+                const token = response.headers.get("token");
+                const refreshToken = response.headers.get("refreshToken");
+
+                if (token !== null && refreshToken !== null) {
+                    Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
+                    Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                    return response.json();
+                }
+
+
                 return response.json();
             }).then((data) => {
                 //! para testes (basta descomentar):
@@ -181,7 +237,7 @@ class GetInfo {
         try {
             fetch("http://localhost:3000/", {
                 method: "POST",
-                headers: { "Content-type": "application/json" },
+                headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify({
                     nome: nome,
                     senha: senha,
@@ -192,6 +248,17 @@ class GetInfo {
                     imagem: imagem64
                 })
             }).then((response) => {
+
+                const token = response.headers.get("token");
+                const refreshToken = response.headers.get("refreshToken");
+
+                if (token !== null && refreshToken !== null) {
+                    Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
+                    Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                    return response.json();
+                }
+
+
                 return response.json()
             }).then((data) => {
                 alert(data.status)
