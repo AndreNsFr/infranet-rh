@@ -1,4 +1,5 @@
 <script lang="js">
+    import { goto } from "$app/navigation";
     import GetInfo from "$lib/helpers/getInfo.js";
     import CreateStaff from "./CreateStaff.svelte";
     import Funcionarios from "./Funcionarios.svelte";
@@ -41,6 +42,10 @@
         status_Profile = false;
         status_Funcionario = false;
     }
+
+    function loggout(){
+        goto('/')
+    }
 </script>
 
 <main>
@@ -54,7 +59,8 @@
             >Configurações de Perfil</button
         ><br />
         <button on:click={mostrar_criar_funcionarios}>Criar funcionarios</button
-        >
+        ><br>
+        <button on:click={loggout}>loggout</button>
     </aside>
 
     <section>

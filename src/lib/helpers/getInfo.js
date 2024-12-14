@@ -20,28 +20,17 @@ class GetInfo {
         })
             .then((response) => response.json())
             .then((data) => {
-                const { token, refreshToken } = data;
-                Cookies.set("token", `${token}`, { expires: 60 / (24 * 60), path: "/" });
-                Cookies.set("refreshToken", `${refreshToken}`, {
-                    expires: 1,
-                    path: "/",
-                });
-                Cookies.set("cpf", `${cpf}`, {
-                    path: "/",
-                });
+                const { token, refreshToken, status } = data;
+                if (status === true) {
 
-                try {
-                    this.#Get(cpf).then((info) => {
-                        if (info) {
-                            goto("login");
-                        }
-                    }).catch((error) => {
-                        alert('Email/Cpf ou senha errados')
-                        console.error(error)
-                    })
-                } catch (error) {
+                    this.#delete_cookies()
+
+                    this.#create_cookies(token, refreshToken, cpf)
+
+                    goto("login");
 
                 }
+
             })
 
             .catch((error) => {
@@ -50,17 +39,42 @@ class GetInfo {
             });
     }
 
+    #create_cookies(token, refreshToken, cpf) {
+
+        Cookies.set("token", token, { expires: 40 / (24 * 60), path: "/" })
+        Cookies.set("refreshToken", refreshToken, { expires: 70 / (24 * 60), path: "/" })
+
+        if (cpf) {
+            Cookies.set("cpf", cpf, { path: "/", });
+        }
+
+    }
+
+    #delete_cookies() {
+        Cookies.remove("token")
+        Cookies.remove("refreshToken")
+        Cookies.remove("cpf")
+    }
+
+    #redirect() {
+        goto('/')
+    }
+
     async  #Get(cpf) {
         await fetch(`http://localhost:3000/?cpf=${cpf}`, {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then(response => {
 
+            if (response.status === 405) {
+                alert("sessão expirada.")
+                this.#redirect()
+            }
+
             const token = response.headers.get("token");
             const refreshToken = response.headers.get("refreshToken");
 
             if (token !== null && refreshToken !== null) {
-                Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
-                Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                this.#create_cookies(token, refreshToken)
                 return response.json();
             }
 
@@ -102,18 +116,23 @@ class GetInfo {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then((response) => {
 
+
+            if (response.status === 405) {
+                alert("sessão expirada.")
+                this.#redirect()
+            }
+
             const token = response.headers.get("token");
             const refreshToken = response.headers.get("refreshToken");
 
             if (token !== null && refreshToken !== null) {
-                Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
-                Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                this.#create_cookies(token, refreshToken)
                 return response.json();
             }
 
             return response.json();
 
-        }).then(async (response) => {
+        }).then((response) => {
 
             return this.info = response
 
@@ -175,16 +194,18 @@ class GetInfo {
                 body: JSON.stringify(sanitized_data)
             }).then((response) => {
 
+                if (response.status === 405) {
+                    alert("sessão expirada.")
+                    this.#redirect()
+                }
+
                 const token = response.headers.get("token");
                 const refreshToken = response.headers.get("refreshToken");
 
                 if (token !== null && refreshToken !== null) {
-                    Cookies.set("token", token, { expires: 1, path: "/" })
-                    Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                    this.#create_cookies(token, refreshToken)
                     return response.json();
                 }
-
-
 
                 return response.json()
             }).then((data_retornada) => {
@@ -206,12 +227,16 @@ class GetInfo {
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
             }).then((response) => {
 
+                if (response.status === 405) {
+                    alert("sessão expirada.")
+                    this.#redirect()
+                }
+
                 const token = response.headers.get("token");
                 const refreshToken = response.headers.get("refreshToken");
 
                 if (token !== null && refreshToken !== null) {
-                    Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
-                    Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                    this.#create_cookies(token, refreshToken)
                     return response.json();
                 }
 
@@ -252,9 +277,13 @@ class GetInfo {
                 const token = response.headers.get("token");
                 const refreshToken = response.headers.get("refreshToken");
 
+                if (response.status === 405) {
+                    alert("sessão expirada.")
+                    this.#redirect()
+                }
+
                 if (token !== null && refreshToken !== null) {
-                    Cookies.set("token", token, { expires: 60 / (24 * 60), path: "/" })
-                    Cookies.set("refreshToken", refreshToken, { expires: 1, path: "/" })
+                    this.#create_cookies(token, refreshToken)
                     return response.json();
                 }
 
