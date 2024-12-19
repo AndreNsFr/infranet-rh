@@ -10,6 +10,7 @@ class GetInfo {
         this.info = null
         this.token = Cookies.get("token")
         this.refreshToken = Cookies.get("refreshToken")
+        this.URL_endpoint = "https://api-rest-sistema-de-gerenciamento-de.onrender.com"
     }
 
     Login(email, cpf, senha) {
@@ -45,7 +46,7 @@ class GetInfo {
         Cookies.set("refreshToken", refreshToken, { expires: 70 / (24 * 60), path: "/" })
 
         if (cpf) {
-            Cookies.set("cpf", cpf, { path: "/", });
+            Cookies.set("cpf", cpf, { expires: 70 / (24 * 60), path: "/" });
         }
 
     }
@@ -61,7 +62,7 @@ class GetInfo {
     }
 
     async  #Get(cpf) {
-        await fetch(`http://localhost:3000/?cpf=${cpf}`, {
+        await fetch(`http://localhost:3000/funcionarios/?cpf=${cpf}`, {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then(response => {
 
@@ -188,7 +189,7 @@ class GetInfo {
 
 
         try {
-            await fetch(`http://localhost:3000/?cpf=${cpf}`, {
+            await fetch(`http://localhost:3000/funcionarios/?cpf=${cpf}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify(sanitized_data)
@@ -222,7 +223,7 @@ class GetInfo {
 
     async DeleteStaff(cpf) {
         try {
-            await fetch(`http://localhost:3000/?cpf=${cpf}`, {
+            await fetch(`http://localhost:3000/funcionarios/?cpf=${cpf}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
             }).then((response) => {
@@ -260,7 +261,7 @@ class GetInfo {
 
 
         try {
-            fetch("http://localhost:3000/", {
+            fetch("http://localhost:3000/funcionarios", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify({

@@ -122,6 +122,7 @@
         display: flex;
         gap: 15px;
         height: 100%;
+        width: 90%;
     }
     form {
         display: flex;

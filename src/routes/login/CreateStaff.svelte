@@ -109,11 +109,13 @@
     main {
         display: flex;
         height: 100%;
+        width: 90%;
     }
     form {
         display: flex;
         flex-direction: column;
         gap: 8px;
+        width: 100%;
     }
     form {
         display: flex;

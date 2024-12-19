@@ -51,9 +51,10 @@
     :global(body) {
         font-family: Arial, Helvetica, sans-serif;
         width: 100vw;
-        min-height: 100vh;
         margin: 0;
         padding: 0;
+        
+        overflow-x: hidden;
     }
 
     main {
