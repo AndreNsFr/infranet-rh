@@ -5,9 +5,8 @@
     import CreateStaff from "./CreateStaff.svelte";
     import Funcionarios from "./Funcionarios.svelte";
     import ProfileConfigs from "./ProfileConfigs.svelte";
+    import Pesquisar from "./Pesquisar.svelte";
     const getinfo = new GetInfo();
-
-    // TODO: fazer aparecer pelomenos um valor retornado do Json do Show();
 
     ///////////////////////////////começo da logica de navegação//////////////////////////////
     let info = {};
@@ -111,7 +110,10 @@
                             (_, i) => i + 1,
                         );
                     }
-                    show_only = filter_by_departamento;
+                    show_only = filter_by_departamento.slice(
+                        pagina_atual_começo,
+                        pagina_atual_final,
+                    );
                 } else {
                     alert("funcionário não encontrado");
                 }
@@ -123,95 +125,60 @@
     }
 
     pagina({ Num_pagina: 1 });
-
-    function pesquisar() {
-        let valor_de_pesquisa = document.getElementById("pesquisa").value;
-        let cpf = document.getElementById("pesquisar_por_cpf");
-        let nome = document.getElementById("pesquisa_por_nome");
-        let departamento = document.getElementById("pesquisa_por_departamento");
-
-        if (cpf.checked) {
-            pagina({ Num_pagina: 1, cpf: valor_de_pesquisa });
-        } else if (nome.checked) {
-            pagina({ Num_pagina: 1, nome: valor_de_pesquisa });
-        } else if (departamento.checked) {
-            pagina({ Num_pagina: 1, departamento: valor_de_pesquisa });
-        } else if (!nome.checked && !cpf.checked && !departamento.checked) {
-            alert("por favor, selecione uma pesquisa valida");
-        }
-    }
-
     /////////////////////////////fim da logica de mostrar os funcionarios////////////////////////////////
+    /////////////////////////////Começo da logica de pesquisar/filtrar funcionarios//////////////////////
 
-    let funcionarios_nav_status = true;
+    let valor_de_pesquisa = false;
+
+    function pesquisar(event) {
+        event.preventDefault();
+
+        valor_de_pesquisa = document.getElementById("pesquisa").value;
+
+        let cpf = document.getElementById("pesquisar_por_cpf").checked
+        let nome = document.getElementById("pesquisa_por_nome").checked
+        let departamento = document.getElementById("pesquisa_por_departamento").checked
+
+        if (cpf) {
+            pagina({ Num_pagina: 1, cpf: valor_de_pesquisa });
+        }
+        if (nome) {
+            pagina({ Num_pagina: 1, nome: valor_de_pesquisa });
+        }
+        if (departamento) {
+            pagina({ Num_pagina: 1, departamento: valor_de_pesquisa });
+        }
+        return valor_de_pesquisa;
+    }
+    /////////////////////////////fim da logica de pesquisar/filtrar funcionarios/////////////////////////
+    
+    
+    let funcionarios_nav_status = true; // serve para ocutar a barra de pesquisa e de navegação de paginas quando entra na pagina para atualizar informações de um funcionario
 </script>
 
 <main>
     <aside>
-        <h3>
-            seja bem vindo {Primeiro_nome}
-        </h3>
-
-        <button on:click={mostrar_funcionarios}>Funcionarios</button> <br />
-        <button on:click={mostrar_configurações_perfil}
-            >Configurações de Perfil</button
-        ><br />
-        <button on:click={mostrar_criar_funcionarios}>Criar funcionarios</button
-        ><br />
-        <button on:click={loggout}>loggout</button>
+        <nav>
+            <h3>
+                seja bem vindo {Primeiro_nome}
+            </h3>
+    
+            <button on:click={mostrar_funcionarios}>Funcionarios</button> <br />
+            <button on:click={mostrar_configurações_perfil}
+                >Configurações de Perfil</button
+            ><br />
+            <button on:click={mostrar_criar_funcionarios}>Criar funcionarios</button
+            ><br />
+            <button on:click={loggout}>loggout</button>
+        </nav>
     </aside>
 
     <section>
         {#if status_Funcionario}
             {#if funcionarios_nav_status}
-                <div class="box-pesquisa">
-                    <input
-                        type="text"
-                        name="pesquisa"
-                        id="pesquisa"
-                        placeholder="pesquisa"
-                    />
-
-                    <span>pesquisar por:</span>
-
-                    <div>
-                        <label for="pesquisa_por_nome">nome:</label>
-                        <input
-                            type="radio"
-                            name="pesquisar_por"
-                            id="pesquisa_por_nome"
-                            value="nome"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label for="pesquisa_por_cpf">cpf:</label>
-                        <input
-                            type="radio"
-                            name="pesquisar_por"
-                            id="pesquisar_por_cpf"
-                            value="cpf"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label for="pesquisa_por_departamento"
-                            >derpartamento:</label
-                        >
-                        <input
-                            type="radio"
-                            name="pesquisar_por"
-                            id="pesquisa_por_departamento"
-                            value="cpf"
-                            required
-                        />
-                    </div>
-                    <input
-                        type="button"
-                        value="pesquisar"
-                        on:click={pesquisar()}
-                    />
-                </div>
+                <Pesquisar {pesquisar} limpar={()=>{
+                    pagina({Num_pagina: 1})
+                }}></Pesquisar>
             {/if}
             <!-- nav_status serve para tirar a barra de pesquisa e a quantidade de paginas, e tambem para colocar devolta quando voltar para a pagina padrão -->
             <Funcionarios
@@ -229,9 +196,10 @@
                 <div class="numpages">
                     {#if total_pages}
                         {#each total_pages as page}
-                            <button on:click={pagina({ Num_pagina: page })}
-                                >{page}</button
-                            >
+                            <!-- o departamento esta declarado para navegar pelas paginas dos funcionarios filtrados pelo departamento, sem isso só parece a primeira pagina -->
+                            <button on:click={pagina({Num_pagina: page, departamento:valor_de_pesquisa})}>
+                                {page}
+                            </button>
                         {/each}
                     {/if}
                 </div>
@@ -253,16 +221,26 @@
         min-height: 100vh;
     }
 
-    aside {
+    aside{
         display: flex;
+        
         flex-direction: column;
         align-items: center;
         background-color: white;
         width: 260px;
+        
         left: 0px;
+        
+    }
+
+    nav{
+        display: flex;
+        flex-direction: column;
+        position: fixed;
     }
 
     section {
+        
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -272,15 +250,6 @@
         margin: 15px;
     }
 
-    .box-pesquisa {
-        background-color: rgb(251, 255, 0);
-        padding: 15px;
-        border-radius: 1000px;
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.452);
-        width: 90%;
-        display: flex;
-        justify-content: space-around;
-    }
 
     .numpages {
         background-color: rgb(0, 140, 255);
