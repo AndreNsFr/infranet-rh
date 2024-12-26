@@ -1,11 +1,17 @@
 <script>
     import GetInfo from "$lib/helpers/getInfo.js";
+    import { onMount } from "svelte";
     import UpdateInfo from "./UpdateInfo.svelte";
 
     const getinfo = new GetInfo();
 
     export let funcionarios;
     export let nav_status;
+    export let carregar
+
+    onMount(()=>{
+        carregar()
+    })
 
     let staffs = true;
     let update_specific_data = false;
@@ -18,10 +24,12 @@
         staffs = false;
         return specific_data;
     }
+    
 </script>
 
 <main>
     {#if staffs}
+        
         <div class="grid-staff">
             {#each funcionarios as funcionario}
                 <div class="staff">
