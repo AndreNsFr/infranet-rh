@@ -126,6 +126,7 @@
 
     pagina({ Num_pagina: 1 });
     /////////////////////////////fim da logica de mostrar os funcionarios////////////////////////////////
+    
     /////////////////////////////Começo da logica de pesquisar/filtrar funcionarios//////////////////////
 
     let valor_de_pesquisa = false;
