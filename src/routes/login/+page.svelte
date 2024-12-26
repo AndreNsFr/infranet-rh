@@ -57,14 +57,64 @@
     let total_pages = null;
 
     function pagina({ Num_pagina, nome, cpf, departamento }) {
+
+        
+
         getinfo.GetAllStaffs().then((staff) => {
+
+            if(Num_pagina === '...'){
+                let pagina_desejada = prompt("digite a pagina desejada")
+                Num_pagina = parseInt(pagina_desejada)
+            }
+
+            
+
             funcionarios = staff;
             let pagina_atual_final = Num_pagina * 10;
             let pagina_atual_começo = pagina_atual_final - 10;
 
             if (funcionarios.length >= 10) {
-                let pages = Math.round(funcionarios.length / 10 + 0.4);
+                let pages =  Math.round(funcionarios.length / 10 + 0.4);
                 total_pages = Array.from({ length: pages }, (_, i) => i + 1);
+
+                //logica de paginação com mais de uma 5 paginas de funcionarios (para não aparecer infinitos botões)
+                if(pages >= 5){
+
+                    let primeira_parte_paginacao = null
+
+                    if(Num_pagina === 1){
+                        primeira_parte_paginacao = total_pages.slice(0,3+Num_pagina-1)
+                    }else if (Num_pagina >= 1){
+                        primeira_parte_paginacao = total_pages.slice(Num_pagina-2,3+Num_pagina-1)
+                    }
+                    
+                     
+                    
+                    let ultimo_numero_paginacao = parseInt(total_pages.slice(-1))
+
+                    console.log(ultimo_numero_paginacao)
+
+                    let array = []
+
+                    primeira_parte_paginacao.forEach(numero_pagina => {
+                        array[numero_pagina-1] = numero_pagina 
+                    });
+
+                   
+                    let filtrado = array.filter((numeros)=>{
+                        return numeros !== null && numeros !== undefined
+                    })
+
+                    let array_final = filtrado
+
+                    array_final[3] = '...'
+                    array_final[4] = ultimo_numero_paginacao
+                   
+                    console.log(array_final)
+                    total_pages = array_final
+
+                }
+
             }
 
             let show_only = funcionarios.slice(
@@ -125,8 +175,9 @@
     }
 
     pagina({ Num_pagina: 1 });
-    /////////////////////////////fim da logica de mostrar os funcionarios////////////////////////////////
+
     
+    /////////////////////////////fim da logica de mostrar os funcionarios////////////////////////////////
     /////////////////////////////Começo da logica de pesquisar/filtrar funcionarios//////////////////////
 
     let valor_de_pesquisa = false;
@@ -177,9 +228,7 @@
     <section>
         {#if status_Funcionario}
             {#if funcionarios_nav_status}
-                <Pesquisar {pesquisar} limpar={()=>{
-                    pagina({Num_pagina: 1})
-                }}></Pesquisar>
+                <Pesquisar {pesquisar} limpar={()=>{pagina({Num_pagina: 1})}} ></Pesquisar>
             {/if}
             <!-- nav_status serve para tirar a barra de pesquisa e a quantidade de paginas, e tambem para colocar devolta quando voltar para a pagina padrão -->
             <Funcionarios
@@ -190,7 +239,10 @@
                     } else if (funcionarios_nav_status === false) {
                         return (funcionarios_nav_status = true);
                     }
-                }}
+                    }}
+
+                carregar={()=>{pagina({Num_pagina:1 })}}
+                
             ></Funcionarios>
 
             {#if funcionarios_nav_status}
