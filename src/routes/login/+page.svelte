@@ -11,6 +11,7 @@
     ///////////////////////////////começo da logica de navegação//////////////////////////////
     let info = {};
     let Primeiro_nome = "";
+    let cpf_pessoal = ""
     getinfo
         .Show()
         .then((x) => {
@@ -19,7 +20,11 @@
         })
         .then((x) => {
             Primeiro_nome = x.nome.split(" ")[0];
-            return Primeiro_nome;
+            let cpf_nao_formatado =  x.cpf.toString().padStart(11, '0');
+            cpf_pessoal = cpf_nao_formatado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            
+            
+            return Primeiro_nome, cpf_pessoal;
         });
 
     let status_Funcionario = true;
@@ -44,7 +49,7 @@
         status_Funcionario = false;
     }
 
-    function loggout() {
+    function logout() {
         Cookies.remove("token");
         Cookies.remove("refreshToken");
         Cookies.remove("cpf");
@@ -55,6 +60,7 @@
     /////////////////////////////começo da logica de mostrar os funcionarios//////////////////////////////
     let funcionarios = [];
     let total_pages = null;
+    let pagina_atual = null;
 
     function pagina({ Num_pagina, nome, cpf, departamento }) {
 
@@ -64,7 +70,17 @@
 
             if(Num_pagina === '...'){
                 let pagina_desejada = prompt("digite a pagina desejada")
-                Num_pagina = parseInt(pagina_desejada)
+                if(pagina_desejada === null || pagina_desejada.trim() === ''){
+                    Num_pagina = 1
+                }else{
+                    if(isNaN(pagina_desejada) || pagina_desejada <= 0){
+                        alert("Por favor, insira um número válido e maior que zero.")
+                        Num_pagina = 1
+                    }else{
+                        Num_pagina = parseInt(pagina_desejada)
+                    }
+                }
+                
             }
 
             
@@ -73,8 +89,17 @@
             let pagina_atual_final = Num_pagina * 10;
             let pagina_atual_começo = pagina_atual_final - 10;
 
+
+            if(Num_pagina > Math.round(funcionarios.length / 10 + 0.4)){
+                pagina({ Num_pagina: Math.round(funcionarios.length / 10 + 0.4), nome:nome, cpf:cpf, departamento:departamento })
+            }
+
+            if(Num_pagina === 0){
+                pagina({ Num_pagina: 1 , nome:nome, cpf:cpf, departamento:departamento })
+            }
+
             if (funcionarios.length >= 10) {
-                let pages =  Math.round(funcionarios.length / 10 + 0.4);
+                let pages = Math.round(funcionarios.length / 10 + 0.4);
                 total_pages = Array.from({ length: pages }, (_, i) => i + 1);
 
                 //logica de paginação com mais de uma 5 paginas de funcionarios (para não aparecer infinitos botões)
@@ -83,25 +108,23 @@
                     let primeira_parte_paginacao = null
 
                     if(Num_pagina === 1){
-                        primeira_parte_paginacao = total_pages.slice(0,3+Num_pagina-1)
+                        primeira_parte_paginacao = total_pages.slice(0 , 3+Num_pagina-1)
                     }else if (Num_pagina >= 1){
-                        primeira_parte_paginacao = total_pages.slice(Num_pagina-2,3+Num_pagina-1)
+                        primeira_parte_paginacao = total_pages.slice(Num_pagina-2 , 3+Num_pagina-1)
                     }
                     
-                     
                     
                     let ultimo_numero_paginacao = parseInt(total_pages.slice(-1))
+                   
 
-                    console.log(ultimo_numero_paginacao)
-
-                    let array = []
+                    let array_paginação = []
 
                     primeira_parte_paginacao.forEach(numero_pagina => {
-                        array[numero_pagina-1] = numero_pagina 
+                        array_paginação[numero_pagina-1] = numero_pagina 
                     });
 
                    
-                    let filtrado = array.filter((numeros)=>{
+                    let filtrado = array_paginação.filter((numeros)=>{
                         return numeros !== null && numeros !== undefined
                     })
 
@@ -110,7 +133,7 @@
                     array_final[3] = '...'
                     array_final[4] = ultimo_numero_paginacao
                    
-                    console.log(array_final)
+
                     total_pages = array_final
 
                 }
@@ -152,9 +175,40 @@
                 );
                 if (filter_by_departamento.length !== 0) {
                     if (filter_by_departamento.length >= 10) {
-                        let pages = Math.round(
-                            filter_by_departamento.length / 10 + 0.4,
-                        );
+                        let pages = Math.round(filter_by_departamento.length / 10 + 0.4,);
+                        if(pages >= 5){
+                            let primeira_parte_paginacao = null
+
+                            if(Num_pagina === 1){
+                                primeira_parte_paginacao = total_pages.slice(0,3+Num_pagina-1)
+                            }else if (Num_pagina >= 1){
+                                primeira_parte_paginacao = total_pages.slice(Num_pagina-2,3+Num_pagina-1)
+                            }
+                            
+                            
+                            
+                            let ultimo_numero_paginacao = parseInt(total_pages.slice(-1))
+
+                            
+
+                            let array = []
+
+                            primeira_parte_paginacao.forEach(numero_pagina => {
+                                array[numero_pagina-1] = numero_pagina 
+                            });
+
+                        
+                            let filtrado = array.filter((numeros)=>{
+                                return numeros !== null && numeros !== undefined
+                            })
+
+                            let array_final = filtrado
+
+                            array_final[3] = '...'
+                            array_final[4] = ultimo_numero_paginacao
+                        
+                            total_pages = array_final
+                        }
                         total_pages = Array.from(
                             { length: pages },
                             (_, i) => i + 1,
@@ -168,10 +222,14 @@
                     alert("funcionário não encontrado");
                 }
             }
+            // transforma o cpf que é apenas um numero de 11 digitos para a padronização correta do cpf
+            show_only.map(funcionario => funcionario.cpf = funcionario.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') )
 
             return (funcionarios = show_only), total_pages;
+
         });
-        return funcionarios, total_pages;
+        
+        return funcionarios, total_pages, pagina_atual = Num_pagina;
     }
 
     pagina({ Num_pagina: 1 });
@@ -185,22 +243,28 @@
     function pesquisar(event) {
         event.preventDefault();
 
-        valor_de_pesquisa = document.getElementById("pesquisa").value;
+        let valor_de_pesquisa_sujo = document.getElementById("pesquisa").value;
+        valor_de_pesquisa = valor_de_pesquisa_sujo.trim()
 
         let cpf = document.getElementById("pesquisar_por_cpf").checked
         let nome = document.getElementById("pesquisa_por_nome").checked
         let departamento = document.getElementById("pesquisa_por_departamento").checked
 
+
+
         if (cpf) {
             pagina({ Num_pagina: 1, cpf: valor_de_pesquisa });
+            return valor_de_pesquisa;
         }
         if (nome) {
             pagina({ Num_pagina: 1, nome: valor_de_pesquisa });
+            return valor_de_pesquisa;
         }
         if (departamento) {
             pagina({ Num_pagina: 1, departamento: valor_de_pesquisa });
+            return valor_de_pesquisa;
         }
-        return valor_de_pesquisa;
+        
     }
     /////////////////////////////fim da logica de pesquisar/filtrar funcionarios/////////////////////////
     
@@ -211,24 +275,63 @@
 <main>
     <aside>
         <nav>
-            <h3>
-                seja bem vindo {Primeiro_nome}
-            </h3>
-    
-            <button on:click={mostrar_funcionarios}>Funcionarios</button> <br />
-            <button on:click={mostrar_configurações_perfil}
-                >Configurações de Perfil</button
-            ><br />
-            <button on:click={mostrar_criar_funcionarios}>Criar funcionarios</button
-            ><br />
-            <button on:click={loggout}>loggout</button>
+
+            <div class="bem-vindo">
+                <img src={info.imagem} width="180px"style="border-radius: 99999px; display:block ;margin:auto;" alt="">
+                <h3>{info.nome}</h3>
+                <span>{cpf_pessoal}</span>
+            </div>
+
+            <div class="botoes">
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div class="navigation" on:click={mostrar_funcionarios}> 
+                    <img src="todos_funcionarios.png" width="15%" alt="" >
+                    <button> Funcionarios</button>
+                </div>
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div class="navigation" on:click={mostrar_configurações_perfil}>
+                    <img src="engrenagem.png" width="15%" alt="">
+                    <button>Configurações de Perfil</button>
+                </div>
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div class="navigation"on:click={mostrar_criar_funcionarios}>
+                    <img src="adicionar-funcionario.png"  width="15%" alt="">
+                    <button>Criar funcionarios</button>
+                </div>
+
+                <hr class="barra-navegação">
+
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_static_element_interactions -->
+                <div class="navigation" on:click={logout} >
+                    <img src="logout.png" width="15%" alt="">
+                    <button>logout</button>
+                </div>
+            </div>
+            
+            
+            <div class="made"> 
+                <hr class="barra-credito">
+                <a href="https://github.com/AndreNsFr" target="_blank">Made by André do Nascimento Ferreira.</a>
+                
+            </div>
         </nav>
+
     </aside>
 
     <section>
         {#if status_Funcionario}
             {#if funcionarios_nav_status}
-                <Pesquisar {pesquisar} limpar={()=>{pagina({Num_pagina: 1})}} ></Pesquisar>
+                <Pesquisar {pesquisar} limpar={
+                        () => {
+                            pagina({Num_pagina: 1})
+                            valor_de_pesquisa = false
+                        }
+                    }>
+                </Pesquisar>
             {/if}
             <!-- nav_status serve para tirar a barra de pesquisa e a quantidade de paginas, e tambem para colocar devolta quando voltar para a pagina padrão -->
             <Funcionarios
@@ -247,14 +350,14 @@
 
             {#if funcionarios_nav_status}
                 <div class="numpages">
+                    <button on:click={pagina({Num_pagina:pagina_atual - 1})} ><img src="seta-esquerda.png" width="10px" alt=""> anterior</button>
                     {#if total_pages}
                         {#each total_pages as page}
                             <!-- o departamento esta declarado para navegar pelas paginas dos funcionarios filtrados pelo departamento, sem isso só parece a primeira pagina -->
-                            <button on:click={pagina({Num_pagina: page, departamento:valor_de_pesquisa})}>
-                                {page}
-                            </button>
+                            <button on:click={pagina({Num_pagina: page, departamento:valor_de_pesquisa})} > {page} </button>
                         {/each}
                     {/if}
+                    <button on:click={pagina({Num_pagina:pagina_atual + 1})} >seguinte <img src="seta-direita.png" width="10px" alt=""></button>
                 </div>
             {/if}
         {/if}
@@ -269,7 +372,7 @@
 
 <style>
     main {
-        background-color: rgb(0, 255, 13);
+        background-color: rgb(255, 255, 255);
         display: flex;
         min-height: 100vh;
     }
@@ -279,18 +382,154 @@
         
         flex-direction: column;
         align-items: center;
-        background-color: white;
+        background-color: rgb(255, 255, 255);
         width: 260px;
-        
+        border-right: solid 1px rgba(0, 0, 0, 0.199);
         left: 0px;
         
     }
 
     nav{
         display: flex;
+        height: 100%;
         flex-direction: column;
+        justify-content: left;
+        align-items: start;
         position: fixed;
+        gap: 15px;
     }
+    
+
+    .bem-vindo{
+        margin-top: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-inline: auto;
+        gap: 13px;
+        letter-spacing:0.90px;
+    }
+
+
+    .bem-vindo > h3{
+        text-align: center;
+        font-weight: 100;
+        color: rgb(31, 31, 31);
+    }
+
+    .bem-vindo > span {
+        color: rgb(51, 51, 51);
+    }
+
+    .bem-vindo > img {
+        height: 180px;
+    }
+
+    .botoes{
+    
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+
+
+    .navigation{
+        width: 83%;
+        display: flex;
+        align-items: center;
+        margin: auto;
+        border-radius: 5px;
+        height: 40px;
+        padding: 8px;
+        gap: 7px;
+    }
+
+
+    .navigation:hover:last-child{
+        transition: 0.25s;
+        background-color:  rgb(212, 24, 24);
+        color: white;
+        cursor: pointer;
+        button{
+            color: white;
+            cursor: pointer;
+            transition: 0.25s;
+            background-color:rgb(212, 24, 24);
+        }
+        img{
+            cursor: pointer;
+            transition: 0.25s;
+            filter: invert(1);
+        }
+    }
+
+
+
+    .navigation:hover{
+        transition: 0.25s;
+        background-color:  rgb(24, 128, 212);
+        color: white;
+        cursor: pointer;
+        button{
+            color: white;
+            cursor: pointer;
+            transition: 0.25s;
+            background-color:rgb(24, 128, 212);
+        }
+        img{
+            cursor: pointer;
+            transition: 0.25s;
+            filter: invert(1);
+        }
+    }
+
+    .navigation > button {
+        border: none;
+        background-color: white;
+        letter-spacing:0.90px;
+        font-weight: 600;
+        font-size: 10pt;
+        color: rgb(51, 51, 51);
+        text-align: start;
+    }
+
+    .barra-navegação{
+        width: 90%; 
+        height: 1px; 
+        border: none; 
+        background-color: #d4d7dd; 
+        margin-inline:auto;
+    }
+
+    .barra-credito{
+        margin-bottom: 25px;
+        width: 100%; 
+        height: 1px; 
+        border: none; 
+        background-color: #d4d7dd; 
+        margin: 1.5rem 1.5;
+    }
+
+    .made{
+        margin-top: auto ;
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .made > a {
+        text-decoration: none;
+        margin: 0;
+        padding-inline: 8px;
+        font-size: 9pt;
+        color: #000000d2;
+        letter-spacing:0.90px;
+    }
+
+    
 
     section {
         
@@ -305,13 +544,37 @@
 
 
     .numpages {
-        background-color: rgb(0, 140, 255);
-        width: 90%;
-        box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.452);
         display: flex;
-        border-radius: 200px;
-        justify-content: space-around;
-        margin-top: 15px;
-        padding: 15px;
+        gap: 10px;
     }
+
+    .numpages > button{
+        border: none;
+        background-color: white;
+        letter-spacing:0.90px;
+        font-weight: 600;
+        font-size: 11pt;
+        color: rgb(51, 51, 51);
+        text-align: start;
+        padding: 14px;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+    }
+
+
+    .numpages > button:hover{
+        transition: 0.25s;
+        cursor: pointer;
+        color: white;
+        background-color: rgb(24, 128, 212);
+       img{
+            transition: 0.25s;
+            filter: invert(1);
+       }
+            
+    }
+
 </style>

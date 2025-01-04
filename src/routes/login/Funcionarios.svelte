@@ -5,7 +5,10 @@
     const getinfo = new GetInfo();
 
     export let funcionarios;
+
     export let nav_status;
+
+    
 
     let staffs = true;
     let update_specific_data = false;
@@ -63,7 +66,7 @@
     }
 
     .staff {
-        background-color: white;
+        background-color: rgb(172, 233, 241);
         display: flex;
         flex-direction: column;
         gap: 15px;
