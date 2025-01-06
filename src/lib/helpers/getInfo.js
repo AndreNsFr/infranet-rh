@@ -133,7 +133,17 @@ class GetInfo {
 
             return response.json();
 
-        }).then((response) => {
+        }).then((response) => {            
+
+            
+            // foreach para concertar a data que vem do backend ( ela vem com um "tracinho" Exemplo: 12-12-2001)
+
+            response.forEach(funcionario => {
+                let data_corrigida = funcionario.data.split("-")
+                funcionario.data = `${data_corrigida[0]} / ${data_corrigida[1]} / ${data_corrigida[2]}`
+            })
+
+
 
             return this.info = response
 

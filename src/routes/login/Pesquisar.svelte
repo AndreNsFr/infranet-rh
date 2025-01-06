@@ -67,7 +67,7 @@
         </div>
         <!-- Input de Pesquisa -->
         <div class="relative w-full">
-            <input type="search" id="pesquisa" class="block p-2.5 w-full z-20 text-sm text-gray-800 bg-white rounded-e-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500" placeholder="Pesquisar funcionário..." on:change={mostrar_o_x} required />
+            <input type="search" id="pesquisa" class="block p-2.5 w-full z-20 text-sm text-gray-800 bg-white rounded-e-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500" placeholder="Pesquisar funcionário..." on:keydown={mostrar_o_x} required />
             <!-- svelte-ignore a11y_click_events_have_key_events -->
             <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
             <img src="x.png" class="limpar-icon" id="btn-limpar" width="15px" on:click={Limpar} alt="">
@@ -110,7 +110,6 @@
 }
 
 .limpar-icon{
-    display: none;
     position: absolute;
     top: 34%; 
     right: 48px;

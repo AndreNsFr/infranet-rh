@@ -372,7 +372,7 @@
 
 <style>
     main {
-        background-color: rgb(255, 255, 255);
+        background-color: #f4f4f4;
         display: flex;
         min-height: 100vh;
     }
@@ -382,7 +382,7 @@
         
         flex-direction: column;
         align-items: center;
-        background-color: rgb(255, 255, 255);
+        background-color: #f4f4f4;
         width: 260px;
         border-right: solid 1px rgba(0, 0, 0, 0.199);
         left: 0px;
@@ -437,29 +437,36 @@
     .navigation{
         width: 83%;
         display: flex;
+
         align-items: center;
         margin: auto;
         border-radius: 5px;
         height: 40px;
         padding: 8px;
         gap: 7px;
+        transition: all 0.25s ease;
+        button{
+            transition: all 0.25s ease;
+        }
+        img{
+            transition: all 0.25s ease;
+        }
     }
 
 
     .navigation:hover:last-child{
-        transition: 0.25s;
         background-color:  rgb(212, 24, 24);
         color: white;
         cursor: pointer;
         button{
             color: white;
             cursor: pointer;
-            transition: 0.25s;
+            
             background-color:rgb(212, 24, 24);
         }
         img{
             cursor: pointer;
-            transition: 0.25s;
+            
             filter: invert(1);
         }
     }
@@ -467,26 +474,26 @@
 
 
     .navigation:hover{
-        transition: 0.25s;
+        
         background-color:  rgb(24, 128, 212);
         color: white;
         cursor: pointer;
         button{
             color: white;
             cursor: pointer;
-            transition: 0.25s;
+            
             background-color:rgb(24, 128, 212);
         }
         img{
             cursor: pointer;
-            transition: 0.25s;
+            
             filter: invert(1);
         }
     }
 
     .navigation > button {
         border: none;
-        background-color: white;
+        background-color:#f4f4f4;
         letter-spacing:0.90px;
         font-weight: 600;
         font-size: 10pt;
@@ -550,7 +557,7 @@
 
     .numpages > button{
         border: none;
-        background-color: white;
+        background-color: #f4f4f4;
         letter-spacing:0.90px;
         font-weight: 600;
         font-size: 11pt;
@@ -562,18 +569,19 @@
         justify-content: center;
         align-items: center;
         gap: 4px;
+        transition:0.25s ease;
+        img{
+            transition: 0.25s ease;
+        }
     }
 
 
     .numpages > button:hover{
-        transition: 0.25s;
-        cursor: pointer;
         color: white;
         background-color: rgb(24, 128, 212);
        img{
-            transition: 0.25s;
             filter: invert(1);
-       }
+        }
             
     }
 
