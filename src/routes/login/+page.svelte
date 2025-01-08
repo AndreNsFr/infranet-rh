@@ -23,30 +23,49 @@
             let cpf_nao_formatado =  x.cpf.toString().padStart(11, '0');
             cpf_pessoal = cpf_nao_formatado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
             
-            
             return Primeiro_nome, cpf_pessoal;
         });
+    //para "forçar" o reinicio do componente funcionarios
+
+    let status_update_in_funcionarios = false
+
+    function handleChildEvent(event) {
+        status_update_in_funcionarios = event.detail;
+    }
+
+
 
     let status_Funcionario = true;
     let status_Profile = false;
     let status_Criar_funcionario = false;
 
     function mostrar_funcionarios() {
+        
+        if(!status_update_in_funcionarios){
+            funcionarios_nav_status = true
+        }else if(status_update_in_funcionarios){
+            funcionarios_nav_status = false
+        }
+
         status_Funcionario = true;
         status_Criar_funcionario = false;
         status_Profile = false;
+        
+        
     }
 
     function mostrar_configurações_perfil() {
         status_Profile = true;
         status_Funcionario = false;
         status_Criar_funcionario = false;
+        status_update_in_funcionarios = false
     }
 
     function mostrar_criar_funcionarios() {
         status_Criar_funcionario = true;
         status_Profile = false;
         status_Funcionario = false;
+        status_update_in_funcionarios = false
     }
 
     function logout() {
@@ -224,6 +243,7 @@
             }
             // transforma o cpf que é apenas um numero de 11 digitos para a padronização correta do cpf
             show_only.map(funcionario => funcionario.cpf = funcionario.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') )
+            show_only.map(funcionario => funcionario.telefone = funcionario.telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'))
 
             return (funcionarios = show_only), total_pages;
 
@@ -287,7 +307,7 @@
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div class="navigation" on:click={mostrar_funcionarios}> 
                     <img src="todos_funcionarios.png" width="15%" alt="" >
-                    <button> Funcionarios</button>
+                    <button> Funcionários</button>
                 </div>
                 <!-- svelte-ignore a11y_click_events_have_key_events -->
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
@@ -299,7 +319,7 @@
                 <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div class="navigation"on:click={mostrar_criar_funcionarios}>
                     <img src="adicionar-funcionario.png"  width="15%" alt="">
-                    <button>Criar funcionarios</button>
+                    <button>Criar funcionários</button>
                 </div>
 
                 <hr class="barra-navegação">
@@ -343,9 +363,12 @@
                         return (funcionarios_nav_status = true);
                     }
                     }}
-
-                carregar={()=>{pagina({Num_pagina:1 })}}
                 
+                
+                status_first_part = {funcionarios_nav_status}
+
+                on:customEvent={handleChildEvent}
+
             ></Funcionarios>
 
             {#if funcionarios_nav_status}

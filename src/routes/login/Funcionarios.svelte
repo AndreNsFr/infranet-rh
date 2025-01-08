@@ -1,12 +1,21 @@
 <script>
     import GetInfo from "$lib/helpers/getInfo.js";
     import UpdateInfo from "./UpdateInfo.svelte";
+    import { createEventDispatcher } from 'svelte';
 
     const getinfo = new GetInfo();
 
     export let funcionarios;
 
     export let nav_status;
+
+    const dispatch = createEventDispatcher();
+
+
+    // svelte-ignore export_let_unused
+    export let Todos_funcionarios
+
+    
 
     
 
@@ -16,11 +25,26 @@
 
     function editar(data) {
         nav_status();
+        dispatch("customEvent", true);
         specific_data = data;
         update_specific_data = true;
         staffs = false;
         return specific_data;
     }
+
+    function copiar(id){
+
+        let texto_a_ser_copiado = document.getElementById(id).innerText
+
+        navigator.clipboard.writeText(texto_a_ser_copiado).then(()=>{
+            alert("texto copiado")
+        }).catch((error)=>{
+            console.log("erro ao copiar:", error)
+        })
+
+    }
+
+
 </script>
 
 <main>
@@ -31,24 +55,32 @@
                     <img src={funcionario.imagem} alt="" />
                     
                     <div class="info-staff">
-                        <div class="flex" style="gap: 5px;justify-content: space-between;"> 
+                        <div class="flex" style="gap: 5px;justify-content: space-between; cursor:pointer;"> 
                             <label style="letter-spacing:0.90px; " for="nome">Nome:</label>   
-                            <h4 id="nome" style="text-align: right;">{funcionario.nome}</h4>
+                            <h4 id="nome" style="text-align: right;" class="truncate max-w-full"  on:dblclick={copiar("nome")}>{funcionario.nome}</h4>
                         </div>
                         <hr>
-                        <div class="flex" style="gap: 5px; justify-content: space-between;"> 
+                        <div class="flex" style="gap: 5px; justify-content: space-between; overflow: hidden;"> 
                             <label style="letter-spacing:0.90px;" for="departamento">Departamento:</label>   
-                            <span id="departamento">{funcionario.departamento}</span>
+                            <span id="departamento" >{funcionario.departamento}</span>
                         </div>
                         <hr>
-                        <div class="flex" style="gap: 5px; justify-content: space-between;"> 
+                        <!-- svelte-ignore a11y_no_static_element_interactions -->
+                        <div class="flex" style="gap: 5px; justify-content: space-between; cursor:pointer;" on:dblclick={copiar("email")} >
+                            <label for="email" style="letter-spacing:0.90px;">Email:</label>
+                            <span id="email" class="truncate max-w-full" >{funcionario.email}</span>
+                        </div>
+                        <hr>
+                        <div class="flex" style="gap: 5px; justify-content: space-between; cursor:pointer;"> 
                             <label style="letter-spacing:0.90px;" for="cpf">Cpf: </label>   
-                            <span id="cpf">{funcionario.cpf}</span>
+                            <!-- svelte-ignore a11y_no_static_element_interactions -->
+                            <span id="cpf"  on:dblclick={copiar("cpf")} >{funcionario.cpf}</span>
                         </div>
                         <hr>
-                        <div class="flex" style="gap: 5px; justify-content: space-between;"> 
-                            <label style="letter-spacing:0.90px;" for="data-de-nascimento">Data de nascimento: </label>   
-                            <span id="data-de-nascimento">{funcionario.data}</span>
+                        <div class="flex" style="gap: 5px; justify-content: space-between; cursor:pointer;"> 
+                            <label style="letter-spacing:0.90px;" for="telefone">N° de celular:</label>   
+                            <!-- svelte-ignore a11y_no_static_element_interactions -->
+                            <span id="telefone" class="truncate max-w-full"  on:dblclick={copiar("telefone")}>{funcionario.telefone}</span>
                         </div>
                     
                         
@@ -71,6 +103,7 @@
             voltar={() => {
                 update_specific_data = false;
                 staffs = true;
+                dispatch("customEvent", false);
                 nav_status();
             }}
         ></UpdateInfo>

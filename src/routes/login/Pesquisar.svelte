@@ -36,7 +36,7 @@
     <div class="flex relative">
         <label for="search-dropdown" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
         <!-- Botão Dropdown -->
-        <button id="dropdown-button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-800 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300" type="button">
+        <button id="dropdown-button" class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-800 bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-300" style="letter-spacing:0.90px;" type="button">
             Filtrar por
             <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
@@ -49,19 +49,19 @@
                     <input type="radio" name="tipo_pesquisa" id="pesquisa_por_nome" class="mr-2" checked >
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                    <label for="pesquisa_por_nome" class="w-full cursor-pointer" on:click={nome}> Nome</label>
+                    <label for="pesquisa_por_nome" class="w-full cursor-pointer"  style="letter-spacing:0.90px;" on:click={nome}> Nome</label>
                 </li>
                 <li class="flex items-center px-4 py-2 hover:bg-gray-100">
                     <input type="radio" name="tipo_pesquisa" id="pesquisar_por_cpf" class="mr-2" >
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                    <label for="pesquisar_por_cpf" class="w-full cursor-pointer" on:click={cpf}> Cpf</label>
+                    <label for="pesquisar_por_cpf" class="w-full cursor-pointer"  style="letter-spacing:0.90px;" on:click={cpf}> Cpf</label>
                 </li>
                 <li class="flex items-center px-4 py-2 hover:bg-gray-100">
                     <input type="radio" name="tipo_pesquisa" id="pesquisa_por_departamento" class="mr-2">
                     <!-- svelte-ignore a11y_click_events_have_key_events -->
                     <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                    <label for="pesquisa_por_departamento" class="w-full cursor-pointer" on:click={departamento} > Departamento</label>
+                    <label for="pesquisa_por_departamento" class="w-full cursor-pointer"  style="letter-spacing:0.90px;" on:click={departamento} > Departamento</label>
                 </li>
             </ul>
         </div>

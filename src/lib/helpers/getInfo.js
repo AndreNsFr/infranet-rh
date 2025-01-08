@@ -82,15 +82,27 @@ class GetInfo {
 
             return response.json();
         }).then(response => {
+
+            
             if (response) {
 
-                const { nome, departamento, email, cpf, imagem, data, erro } = response
+                response.telefone = response.telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
+                response.cpf = response.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') 
+                
+                let data_corrigida = response.data.split("-")
+                response.data = `${data_corrigida[0]} / ${data_corrigida[1]} / ${data_corrigida[2]}`
+                
+
+
+                const { nome, departamento, email, cpf, imagem, data, telefone, erro } = response
+
 
                 if (erro) {
                     throw new Error('usuario não encotrado')
                 }
 
-                return this.info = { nome: nome, departamento: departamento, email: email, cpf: cpf, imagem: imagem, data: data };
+
+                return this.info = { nome: nome, departamento: departamento, email: email, cpf: cpf, telefone: telefone, imagem: imagem, data: data };
             } else {
                 alert('usuario não encontrado')
             }
@@ -174,7 +186,7 @@ class GetInfo {
     }
 
 
-    async UpdateInfo(cpf, nome, email, imagem, senha, departamento) {
+    async UpdateInfo(cpf, nome, email, telefone, imagem, senha, departamento) {
 
 
         const imagem64 = await this.toBase64(imagem)
@@ -184,6 +196,7 @@ class GetInfo {
             nome: nome,
             email: email,
             imagem: imagem64,
+            telefone:telefone,
             senha: senha,
             departamento: departamento
         }
@@ -265,7 +278,7 @@ class GetInfo {
     }
 
 
-    async CreateStaff(nome, senha, departamento, cpf, email, data_nas, imagem) {
+    async CreateStaff(nome, senha, departamento, cpf, telefone, email, data_nas, imagem) {
 
         const imagem64 = await this.toBase64(imagem)
 
@@ -279,6 +292,7 @@ class GetInfo {
                     senha: senha,
                     departamento: departamento,
                     cpf: cpf,
+                    telefone:telefone,
                     data: data_nas,
                     email: email,
                     imagem: imagem64
