@@ -86,14 +86,16 @@
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<div class="voltar"><img src="voltar.png" width="50px"  on:click={voltar()} alt=""></div>
+<!-- svelte-ignore a11y_no_static_element_interactions -->
+<div class="voltar" on:click={voltar()} ><img src="seta-esquerda.png" width="12px" style="height: 12px; margin-block: auto;"  alt="">voltar</div>
 
 <div class="configurações" >
     <div class="container-config">
 
         <!-- svelte-ignore a11y_click_events_have_key_events -->
         <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-        <div class="delete"><img src="lixo.png" on:click={DeleteStaffs()} alt=""></div>
+        <!-- svelte-ignore a11y_no_static_element_interactions -->
+        <div class="delete" on:click={DeleteStaffs()}><img src="lixo.png" alt=""></div>
         <h1 class="titulo">Alterar dados do funcionário</h1>
         <div class="seus-dados">
             <img
@@ -243,9 +245,15 @@
     }
 
     .voltar{
+        display: flex;
         padding: 8px;
         border-radius: 5px; 
         position: fixed; 
+        gap: 5px;
+        font-weight: 600;
+        color: rgb(51, 51, 51);
+        letter-spacing: 0.90px;
+        font-size: 13pt;
         right: 4%; 
         top:4%; 
         cursor:pointer;
@@ -257,6 +265,7 @@
 
     .voltar:hover{
         background-color: rgb(24, 128, 212);
+        color: white;
         img{
             filter: invert(1);
         }
