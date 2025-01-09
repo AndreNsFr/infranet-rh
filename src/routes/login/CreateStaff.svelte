@@ -52,7 +52,7 @@
 
 
 
-<div style="display: flex; align-items: center; justify-content: center; height: 130%;" >
+<div class="container-create">
     <div class="create">
 
         <h1 class="titulo">Criar novo funcionário</h1>
@@ -162,6 +162,13 @@
         letter-spacing:0.90px;
     }
 
+    .container-create{
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        height: 130%;
+    }
+
     .create{
         background-color: rgba(255, 255, 255, 0.712);
         box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.301);
@@ -193,4 +200,11 @@
         border-radius: 9000px;
     }
     
+    @media screen and (max-height: 900px){
+        .container-create{
+            height: auto;
+        }
+    }
+
+
 </style>
