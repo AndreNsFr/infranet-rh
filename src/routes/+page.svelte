@@ -4,6 +4,14 @@
 
     const getInfo = new GetInfo();
 
+    function carregar(){
+        document.body.style.cursor = "wait"
+        setTimeout(()=>{
+            document.body.style.cursor = "default"
+        }, 2000)
+    }
+
+
     function contato(event) {
         event.preventDefault();
         const email = document.getElementById("email").value;
@@ -19,7 +27,7 @@
 
         <h1 class="titulo">Login</h1>
 
-        <form class="max-w-md mx-auto" on:submit={contato} >
+        <form class="max-w-md mx-auto" on:submit={contato} on:submit{carregar}>
 
             <div class="relative z-0 w-full mb-5 group">
 
@@ -42,7 +50,7 @@
                 
             </div>
 
-            <input type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center" value="Entrar"/>
+            <input type="submit" on:click={carregar} class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center" value="Entrar"/>
 
         </form>
         

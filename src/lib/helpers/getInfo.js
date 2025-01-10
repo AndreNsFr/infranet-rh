@@ -20,6 +20,11 @@ class GetInfo {
         })
             .then((response) => response.json())
             .then((data) => {
+
+                if(data.erro){
+                    alert(data.erro)
+                }
+
                 const { token, refreshToken, status } = data;
                 if (status === true) {
 
