@@ -55,12 +55,12 @@
     }
 
     function mostrar_configurações_perfil() {
-
+        
         document.body.style.cursor = "wait"
         setTimeout(()=>{
             document.body.style.cursor = "default"
-        }, 3000)
-        
+        }, 2000)
+
         status_Profile = true;
         status_Funcionario = false;
         status_Criar_funcionario = false;

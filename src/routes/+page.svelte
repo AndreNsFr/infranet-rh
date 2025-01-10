@@ -26,7 +26,7 @@
 
         <h1 class="titulo">Login</h1>
 
-        <form class="max-w-md mx-auto" on:submit={contato} >
+        <form class="max-w-md mx-auto" on:submit={contato} on:submit{carregar}>
 
             <div class="relative z-0 w-full mb-5 group">
 
