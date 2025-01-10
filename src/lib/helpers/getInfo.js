@@ -10,11 +10,10 @@ class GetInfo {
         this.info = null
         this.token = Cookies.get("token")
         this.refreshToken = Cookies.get("refreshToken")
-        this.URL_endpoint = "https://api-rest-sistema-de-gerenciamento-de.onrender.com"
     }
 
     Login(email, cpf, senha) {
-        fetch("http://localhost:3000/auth", {
+        fetch("https://api-rh-27z7.onrender.com/auth", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email, cpf: cpf, senha: senha }),
@@ -62,7 +61,7 @@ class GetInfo {
     }
 
     async  #Get(cpf) {
-        await fetch(`http://localhost:3000/funcionarios/?cpf=${cpf}`, {
+        await fetch(`https://api-rh-27z7.onrender.com/funcionarios/?cpf=${cpf}`, {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then(response => {
 
@@ -125,7 +124,7 @@ class GetInfo {
     async GetAllStaffs() {
 
 
-        await fetch("http://localhost:3000/staff", {
+        await fetch("https://api-rh-27z7.onrender.com/staff", {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then((response) => {
 
@@ -212,7 +211,7 @@ class GetInfo {
 
 
         try {
-            await fetch(`http://localhost:3000/funcionarios/?cpf=${cpf}`, {
+            await fetch(`https://api-rh-27z7.onrender.com/funcionarios/?cpf=${cpf}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify(sanitized_data)
@@ -246,7 +245,7 @@ class GetInfo {
 
     async DeleteStaff(cpf) {
         try {
-            await fetch(`http://localhost:3000/funcionarios/?cpf=${cpf}`, {
+            await fetch(`https://api-rh-27z7.onrender.com/funcionarios/?cpf=${cpf}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
             }).then((response) => {
@@ -284,7 +283,7 @@ class GetInfo {
 
 
         try {
-            fetch("http://localhost:3000/funcionarios", {
+            fetch("https://api-rh-27z7.onrender.com/funcionarios", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify({
@@ -341,7 +340,7 @@ class GetInfo {
         })
 
 
-        await fetch("http://localhost:3000/auth", {
+        await fetch("https://api-rh-27z7.onrender.com/auth", {
             method: "post",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ email: email, senha: senha, cpf: cpf })
