@@ -4,13 +4,20 @@
 
     const getInfo = new GetInfo();
 
+    function carregar(){
+        document.body.style.cursor = "wait"
+        setTimeout(()=>{
+            document.body.style.cursor = "default"
+        }, 2000)
+    }
+
     function contato(event) {
         event.preventDefault();
         const email = document.getElementById("email").value;
         const cpf = document.getElementById("cpf").value;
         const senha = document.getElementById("senha").value;
 
-        getInfo.Login(email, cpf, senha);
+        getInfo.Login(email, cpf, senha)
     }
 </script>
 
@@ -42,14 +49,9 @@
                 
             </div>
 
-            <input type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center" value="Entrar"/>
+            <input type="submit" on:click={carregar} class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center" value="Entrar"/>
 
         </form>
-        
-           
-
-        
-        
         
            
     </section>
@@ -61,8 +63,8 @@
         width: 100vw;
         margin: 0;
         padding: 0;
-        
         overflow-x: hidden;
+
     }
 
     main {
@@ -103,6 +105,10 @@
         box-shadow: 3px 4px 8px rgba(0, 0, 0, 0.301);
     }
 
+    input[type="submit"]:active{
+        cursor: wait;
+    }
+    
 
     .titulo{
         position: absolute;
