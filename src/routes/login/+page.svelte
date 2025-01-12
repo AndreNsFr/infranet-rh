@@ -10,22 +10,12 @@
 
     ///////////////////////////////começo da logica de navegação//////////////////////////////
     let info = {};
-    let Primeiro_nome = "";
-    let cpf_pessoal = ""
     getinfo
         .Show()
         .then((x) => {
             info = x;
             return info;
         })
-        .then((x) => {
-            Primeiro_nome = x.nome.split(" ")[0];
-            let cpf_nao_formatado =  x.cpf.toString().padStart(11, '0');
-            cpf_pessoal = cpf_nao_formatado.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-            
-            return Primeiro_nome, cpf_pessoal;
-        });
-    //para "forçar" o reinicio do componente funcionarios
 
     let status_update_in_funcionarios = false
 
@@ -248,8 +238,6 @@
                 }
             }
             // transforma o cpf que é apenas um numero de 11 digitos para a padronização correta do cpf
-            show_only.map(funcionario => funcionario.cpf = funcionario.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') )
-            show_only.map(funcionario => funcionario.telefone = funcionario.telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'))
 
             return (funcionarios = show_only), total_pages;
 
@@ -305,7 +293,7 @@
             <div class="bem-vindo">
                 <img src={info.imagem} width="180px"style="border-radius: 99999px; display:block ;margin:auto;" alt="">
                 <h3>{info.nome}</h3>
-                <span>{cpf_pessoal}</span>
+                <span>{info.cpf}</span>
             </div>
 
             <div class="botoes">
@@ -369,9 +357,7 @@
                         return (funcionarios_nav_status = true);
                     }
                     }}
-                
-                
-                status_first_part = {funcionarios_nav_status}
+            
 
                 on:customEvent={handleChildEvent}
 

@@ -11,6 +11,18 @@
         }, 2000)
     }
 
+    function formatarCpf(){
+        let campo = document.getElementById("cpf");
+        let valor = campo.value
+
+        valor = valor.replace(/[^\d]/g, '');
+
+        valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+
+        campo.value = valor
+
+    }
+
     function contato(event) {
         event.preventDefault();
         const email = document.getElementById("email").value;
@@ -37,7 +49,7 @@
 
             <div class="relative z-0 w-full mb-5 group">
 
-                <input type="text" name="cpf" id="cpf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                <input type="text" name="cpf" minlength="11" maxlength="11" on:input={formatarCpf} id="cpf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                 <label for="cpf" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Cpf</label>
 
             </div>

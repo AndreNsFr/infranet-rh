@@ -5,32 +5,97 @@
 
     const getInfo = new GetInfo();
 
-    function create() {
+
+
+    function formatarCpf(){
+        let campo = document.getElementById("cpf");
+        let valor = campo.value
+
+        valor = valor.replace(/[^0-9.-]/g, '');
+
+        valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+
+        campo.value = valor
+
+    }
+
+
+
+    function formatarTelefone() {
+    let campo = document.getElementById("telefone");
+    let valor = campo.value;
+
+
+    valor = valor.replace(/[^\d+]/g, '');
+
+    if (/^[0-9]/.test(valor)) {
+        
+        // telefone celular: (XX) XXXXX-XXXX
+        
+        valor = valor.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+
+        // caso for fixo : (XX) XXXX-XXXX
+
+        valor = valor.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        
+        
+        
+
+    } else if (valor.startsWith('+')){
+        
+        campo.maxLength = 17
+
+        let label = document.getElementById("label-telefone")
+
+
+        valor = valor.replace('+', '');
+
+        valor = valor.replace(/(\d{1,3})(\d{1,13})?/, '$1 $2').trim();
+        
+
+        label.innerText ="Por favor, siga o exemplo EUA : '+001 (resto do numero)'."
+        label.style.color = "red"
+
+        valor = "+" + valor
+    }
+
+
+    campo.value = valor;
+}
+
+
+
+    function create(event) {
         event.preventDefault();
 
-        const nome = document.getElementById("nome").value;
-        const senha = document.getElementById("senha").value;
-        const departamento = document.getElementById("departamento").value;
-        const cpf = document.getElementById("cpf").value;
-        const telefone = document.getElementById("telefone").value
-        const email = document.getElementById("email").value;
-        const data = document.getElementById("data-nas").value;
+        const nome = document.getElementById("nome").value.trim()
+        const senha = document.getElementById("senha").value.trim()
+        const departamento = document.getElementById("departamento").value.trim()
+        const cpf = document.getElementById("cpf").value
+        const telefone = document.getElementById("telefone").value.trim()
+        const email = document.getElementById("email").value.trim()
+        const data = document.getElementById("data-nas").value
         const [ano, mes, dia] = data.split("-");
-        let data_nas = `${dia}-${mes}-${ano}`;
+        let data_nas = `${dia} / ${mes} / ${ano}`;
         const imagem = document.getElementById("imagem").files[0];
 
-        getInfo
-            .CreateStaff(
-                nome,
-                senha,
-                departamento,
-                cpf,
-                telefone,
-                email,
-                data_nas,
-                imagem,
-            )
-            .then();
+        if(/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(cpf)){
+            getInfo
+                .CreateStaff(
+                    nome,
+                    senha,
+                    departamento,
+                    cpf,
+                    telefone,
+                    email,
+                    data_nas,
+                    imagem,
+                ).then()
+        }else {
+            alert("Cpf fora do padrão. por favor verificar.")
+            document.getElementById("cpf").value = null
+        }
+
     }
 
     let file = null; // Armazena o arquivo selecionado
@@ -48,7 +113,6 @@
 
 </script>
 
-<main>
 
 
 
@@ -60,14 +124,14 @@
         <br>
         
         
-        <form class="max-w-md mx-auto" on:submit={create(event)}>
+        <form class="max-w-md mx-auto" on:submit={create}>
             <div class="relative z-0 w-full mb-5 group">
                 <input type="text" name="nome" id="nome" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                 <label for="nome" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nome completo</label>
             </div>
         
             <div class="relative z-0 w-full mb-5 group">
-                <input type="password" name="senha" id="senha" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <input type="password" minlength="8" name="senha" id="senha" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                 <label for="senha" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Senha</label>
             </div>
         
@@ -77,13 +141,13 @@
             </div>
         
             <div class="relative z-0 w-full mb-5 group">
-                <input type="text" name="cpf" id="cpf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <input type="text" name="cpf" minlength="11" maxlength="11" on:input={formatarCpf} id="cpf" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
                 <label for="cpf" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">CPF</label>
             </div>
         
             <div class="relative z-0 w-full mb-5 group">
-                <input type="tel" name="telefone" id="telefone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                <label for="telefone" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefone</label>
+                <input type="tel" name="telefone" maxlength="15" id="telefone" on:input={formatarTelefone}  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <label for="telefone" id="label-telefone" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefone</label>
             </div>
         
             <div class="relative z-0 w-full mb-5 group">
@@ -128,6 +192,7 @@
                         id="imagem"
                         type="file"
                         class="hidden"
+                        accept=".jpg, .png , .jpeg"
                         on:change="{handleFileChange}"
                     />
                 </label>
@@ -151,14 +216,12 @@
 </div>
 
     
-</main>
-
 
 
 
 <style>
 
-    main{
+    .container-create{
         letter-spacing:0.90px;
     }
 
@@ -166,7 +229,7 @@
         display: flex; 
         align-items: center; 
         justify-content: center; 
-        height: 130%;
+        height: 100%;
     }
 
     .create{

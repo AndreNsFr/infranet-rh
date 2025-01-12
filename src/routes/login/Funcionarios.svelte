@@ -12,8 +12,8 @@
     const dispatch = createEventDispatcher();
 
 
-    // svelte-ignore export_let_unused
-    export let Todos_funcionarios
+
+
 
     
 
@@ -47,7 +47,7 @@
 
 </script>
 
-<main>
+
     {#if staffs}
         <div class="grid-staff">
             {#each funcionarios as funcionario}
@@ -108,7 +108,7 @@
             }}
         ></UpdateInfo>
     {/if}
-</main>
+
 
 <style>
     .grid-staff {

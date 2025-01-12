@@ -5,6 +5,48 @@
 
     const getInfo = new GetInfo();
 
+    function formatarTelefone() {
+        let campo = document.getElementById("telefone");
+        let valor = campo.value;
+
+
+        valor = valor.replace(/[^\d+]/g, '');
+
+        if (/^[0-9]/.test(valor)) {
+            
+            // telefone celular: (XX) XXXXX-XXXX
+            
+            valor = valor.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+
+            // caso for fixo : (XX) XXXX-XXXX
+
+            valor = valor.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+            
+            
+            
+
+        } else if (valor.startsWith('+')){
+            
+            campo.maxLength = 17
+
+            let label = document.getElementById("label-telefone")
+
+
+            valor = valor.replace('+', '');
+
+            valor = valor.replace(/(\d{1,3})(\d{1,13})?/, '$1 $2').trim();
+            
+
+            label.innerText ="Por favor, siga o exemplo EUA : '+001 (resto do numero)'."
+            label.style.color = "red"
+
+            valor = "+" + valor
+        }
+
+
+        campo.value = valor;
+    }
+
     let configs = {};
 
     getInfo.Show().then((data) => {
@@ -105,7 +147,7 @@
     
         <div class="form-configs">
             
-            <form class="max-w-md mx-auto" on:submit={sendNewData(event)} >
+            <form class="max-w-md mx-auto" on:submit={sendNewData} >
                 <div class="relative z-0 w-full mb-5 group">
                     <input type="text" name="nome" value={configs.nome} id="nome" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                     <label for="nome" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nome completo</label>
@@ -118,8 +160,8 @@
                 
             
                 <div class="relative z-0 w-full mb-5 group">
-                    <input type="tel" name="telefone" value={configs.telefone} id="telefone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                    <label for="telefone" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Telefone</label>
+                    <input type="tel" name="telefone" maxlength="15" on:input={formatarTelefone} value={configs.telefone} id="telefone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <label for="telefone" id="label-telefone" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6" >Telefone</label>
                 </div>
             
                 <div class="relative z-0 w-full mb-5 group">
@@ -173,9 +215,6 @@
                         </div>
                     {/if}
                 </div>
-                
-                
-        
                         
                 <input type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-sm px-5 py-2.5 text-center" value="Enviar"/>
             </form>

@@ -13,7 +13,7 @@ class GetInfo {
     }
 
     Login(email, cpf, senha) {
-        fetch("https://api-rh-27z7.onrender.com/auth", {
+        fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/auth", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email, cpf: cpf, senha: senha }),
@@ -66,7 +66,7 @@ class GetInfo {
     }
 
     async  #Get(cpf) {
-        await fetch(`https://api-rh-27z7.onrender.com/funcionarios/?cpf=${cpf}`, {
+        await fetch(`https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then(response => {
 
@@ -89,13 +89,6 @@ class GetInfo {
 
             
             if (response) {
-
-                response.telefone = response.telefone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
-                response.cpf = response.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4') 
-                
-                let data_corrigida = response.data.split("-")
-                response.data = `${data_corrigida[0]} / ${data_corrigida[1]} / ${data_corrigida[2]}`
-                
 
 
                 const { nome, departamento, email, cpf, imagem, data, telefone, erro } = response
@@ -129,7 +122,7 @@ class GetInfo {
     async GetAllStaffs() {
 
 
-        await fetch("https://api-rh-27z7.onrender.com/staff", {
+        await fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/staff", {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then((response) => {
 
@@ -150,15 +143,6 @@ class GetInfo {
             return response.json();
 
         }).then((response) => {            
-
-            
-            // foreach para concertar a data que vem do backend ( ela vem com um "tracinho" Exemplo: 12-12-2001)
-
-            response.forEach(funcionario => {
-                let data_corrigida = funcionario.data.split("-")
-                funcionario.data = `${data_corrigida[0]} / ${data_corrigida[1]} / ${data_corrigida[2]}`
-            })
-
 
 
             return this.info = response
@@ -216,7 +200,7 @@ class GetInfo {
 
 
         try {
-            await fetch(`https://api-rh-27z7.onrender.com/funcionarios/?cpf=${cpf}`, {
+            await fetch(`https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify(sanitized_data)
@@ -237,7 +221,10 @@ class GetInfo {
 
                 return response.json()
             }).then((data_retornada) => {
-                // console.log("data retornada: ", data_retornada)
+
+                alert(data_retornada.status)
+
+                
             }).catch((error) => {
                 console.log(error)
             })
@@ -250,7 +237,7 @@ class GetInfo {
 
     async DeleteStaff(cpf) {
         try {
-            await fetch(`https://api-rh-27z7.onrender.com/funcionarios/?cpf=${cpf}`, {
+            await fetch(`https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
             }).then((response) => {
@@ -288,7 +275,7 @@ class GetInfo {
 
 
         try {
-            fetch("https://api-rh-27z7.onrender.com/funcionarios", {
+            fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify({
@@ -319,7 +306,19 @@ class GetInfo {
 
                 return response.json()
             }).then((data) => {
-                alert(data.status)
+
+                alert(data.status.status)
+
+                if(data.status.error){
+
+                    let erro_funcionario = data.status.error.meta.target
+
+                    erro_funcionario.split('_')[1]
+
+                    alert("informação duplicada: " + erro_funcionario.split('_')[1])
+                }
+
+
             }).catch((erro) => {
                 console.log({ error: erro })
             })
@@ -345,7 +344,7 @@ class GetInfo {
         })
 
 
-        await fetch("https://api-rh-27z7.onrender.com/auth", {
+        await fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/auth", {
             method: "post",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ email: email, senha: senha, cpf: cpf })

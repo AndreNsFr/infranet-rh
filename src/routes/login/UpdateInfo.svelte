@@ -11,12 +11,57 @@
     let staff_data = specific_data;
 
 
-    // ERRO GIGATONICO ---> quando voce aperta em algum outro botão do lado, por exemplo o de criar funcionarios, a barra de pesquisa e os numeros de paginação somem e não volta quando se clica nos funcionarios so aparece os funcionarios sem a barra de pesquisa como eu disse. Resolver esse erro agora! 
+    function formatarTelefone() {
+        let campo = document.getElementById("telefone");
+        let valor = campo.value;
+
+
+        valor = valor.replace(/[^\d+]/g, '');
+
+        if (/^[0-9]/.test(valor)) {
+            
+            // telefone celular: (XX) XXXXX-XXXX
+            
+            valor = valor.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+
+            // caso for fixo : (XX) XXXX-XXXX
+
+            valor = valor.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+            
+            
+            
+
+        } else if (valor.startsWith('+')){
+            
+            campo.maxLength = 17
+
+            let label = document.getElementById("label-telefone")
+
+
+            valor = valor.replace('+', '');
+
+            valor = valor.replace(/(\d{1,3})(\d{1,13})?/, '$1 $2').trim();
+            
+
+            label.innerText ="Por favor, siga o exemplo EUA : '+001 (resto do numero)'."
+            label.style.color = "red"
+
+            valor = "+" + valor
+        }
+
+
+        campo.value = valor;
+    }
 
 
 
 
-    function DeleteStaffs(cpf) {
+
+
+    function DeleteStaffs() {
+
+        let cpf = specific_data.cpf
+
         let confirmar = confirm(
             "Este funcionario será excluido permanentimente, tem certeza disto?",
         );
@@ -43,13 +88,11 @@
         // logica para transformar o cpf formatado correto para cpf sem nada (é preciso para que o backend entenda)
         //  123.456.789.10 --> 12345678910 
         
-        let first_part = staff_data.cpf.split(".")
-        first_part = first_part[0] + first_part[1] + first_part[2]
-        let second_part = first_part.split("-")
-        let cpf = second_part[0] + second_part[1]
+  
+
 
         
-
+        let cpf = document.getElementById("cpf").value;
         let nome = document.getElementById("nome").value;
         let email = document.getElementById("email").value;
         let senha = document.getElementById("senha").value;
@@ -146,7 +189,7 @@
     
         <div class="form-configs">
             
-            <form class="max-w-md mx-auto" on:submit={sendNewData(event)} >
+            <form class="max-w-md mx-auto" on:submit={sendNewData} >
                 <div class="relative z-0 w-full mb-5 group">
                     <input type="text" name="nome" id="nome" value={specific_data.nome} class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                     <label for="nome" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Nome completo</label>
@@ -162,8 +205,8 @@
                 
             
                 <div class="relative z-0 w-full mb-5 group">
-                    <input type="tel" name="telefone" id="telefone" value={specific_data.telefone} class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                    <label for="telefone" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefone</label>
+                    <input type="tel" name="telefone" id="telefone" maxlength="15" on:input={formatarTelefone} value={specific_data.telefone} class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                    <label for="telefone" id="label-telefone" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Telefone</label>
                 </div>
             
                 <div class="relative z-0 w-full mb-5 group">
@@ -233,7 +276,7 @@
 <style>
     .configurações {
         display: flex;
-        height: 140%;
+        height: 100%;
         width: 90%;
         align-items: center;
         justify-content: center;
