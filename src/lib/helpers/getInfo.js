@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { goto } from "$app/navigation";
+import { TokenClass } from "typescript";
 
 
 
@@ -41,7 +42,13 @@ class GetInfo {
             .catch((error) => {
                 console.error("Erro na requisição:", error);
                 alert("Erro ao conectar ao servidor.");
-            });
+            })
+            .finally(()=>{
+
+                // * logica de status de carregamento
+
+                document.getElementById("carregando").style.display = "none"
+            })
     }
 
     #create_cookies(token, refreshToken, cpf) {
@@ -144,6 +151,16 @@ class GetInfo {
 
         }).then((response) => {            
 
+
+            //* logica para tirar o propio usuario do dashboard (não faz sentido poder alterar o seu própio perfil de funcionario)
+
+            let cpf_usuario = Cookies.get("cpf");
+
+            let todos_funcionarios = response.filter((funcionario)=>{
+                return funcionario.cpf !== cpf_usuario
+            })
+
+            response = todos_funcionarios
 
             return this.info = response
 
@@ -328,8 +345,6 @@ class GetInfo {
     }
 
     async VerifyActions() {
-
-        // ? teoricamente isso ta funcionando, basta testar
 
         let senha = prompt(
             "Esta alteração será aplicada, você tem certeza ? \n \n Digite a sua senha:",

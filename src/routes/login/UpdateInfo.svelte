@@ -84,18 +84,10 @@
 
     function sendNewData(event) {
         event.preventDefault();
-
-        // logica para transformar o cpf formatado correto para cpf sem nada (é preciso para que o backend entenda)
-        //  123.456.789.10 --> 12345678910 
-        
-  
-
-
         
         let cpf = document.getElementById("cpf").value;
         let nome = document.getElementById("nome").value;
         let email = document.getElementById("email").value;
-        let senha = document.getElementById("senha").value;
         let departamento = document.getElementById("departamento").value;
         let telefone = document.getElementById("telefone").value
         let imagem = document.getElementById("imagem").files[0];
@@ -104,7 +96,7 @@
             .VerifyActions()
             .then((Response) => {
                 if (Response) {
-                    getInfo.UpdateInfo(cpf, nome.trim(), email.trim(), telefone.trim(), imagem, senha.trim(),departamento.trim()).then();
+                    getInfo.UpdateInfo(cpf, nome.trim(), email.trim(), telefone.trim(), imagem,"",departamento.trim()).then();
                 }
             })
             .catch((erro) => {
@@ -287,6 +279,7 @@
         display: flex;
         padding: 8px;
         border-radius: 5px; 
+        z-index: 5;
         position: fixed; 
         gap: 5px;
         font-weight: 600;

@@ -50,9 +50,59 @@
     let configs = {};
 
     getInfo.Show().then((data) => {
+        document.getElementById("Carregando-config").style.display = "none"
+        document.getElementById("Container").style.display = "flex"
         configs = data;
         return configs;
     });
+
+    function interactive_password(passwords){
+        if(passwords === 1){
+            let input_password = document.getElementById("senha")
+            let img_button = document.getElementById("img_senha")
+
+            if (input_password.type === "password"){
+                input_password.setAttribute("type","text")
+                img_button.src = "senha_hide.png"
+            }else{
+                input_password.setAttribute("type","password")
+                img_button.src = "senha_show.png"
+            }
+        }else if(passwords ===2){
+            let input_password = document.getElementById("confirmar_senha")
+            let img_button = document.getElementById("img_senha2")
+
+            if (input_password.type === "password"){
+                input_password.setAttribute("type","text")
+                img_button.src = "senha_hide.png"
+            }else{
+                input_password.setAttribute("type","password")
+                img_button.src = "senha_show.png"
+            }
+        }
+    }
+
+    function mostrar_senha_btn(passwords){
+        if(passwords === 1){
+            let input_password = document.getElementById("senha")
+            let img_button = document.getElementById("img_senha")
+
+            if(input_password.value == ""){
+                img_button.style.display = "none"
+            }else{
+                img_button.style.display = "block"
+            }
+        }else if(passwords === 2){
+            let input_password = document.getElementById("confirmar_senha")
+            let img_button = document.getElementById("img_senha2")
+
+            if(input_password.value == ""){
+                img_button.style.display = "none"
+            }else{
+                img_button.style.display = "block"
+            }
+        }
+    }
 
     function sendNewData(event) {
         event.preventDefault();
@@ -62,10 +112,12 @@
         let nome = document.getElementById("nome").value;
         let email = document.getElementById("email").value;
         let senha = document.getElementById("senha").value;
-        let telefone = document.getElementById("telefone").value
+        let confirmação_da_senha = document.getElementById("confirmar_senha").value;
+        let telefone = document.getElementById("telefone").value;
         let imagem = document.getElementById("imagem").files[0];
 
-        getInfo
+        if(senha === confirmação_da_senha){
+            getInfo
             .VerifyActions()
             .then((Response) => {
                 if (Response) {
@@ -75,6 +127,9 @@
             .catch((erro) => {
                 console.error(erro);
             });
+        }else{
+            alert("As senhas não correspondem.")
+        }
     }
 
 
@@ -95,7 +150,10 @@
 </script>
 
 <div class="configurações">
-    <div class="container-config">
+
+    <div id="Carregando-config" class="carregando"><div class="loading"></div></div>
+
+    <div class="container-config" id="Container">
 
         <h1 class="titulo"> Alterar informações pessoais </h1>
         
@@ -154,10 +212,47 @@
                 </div>
             
                 <div class="relative z-0 w-full mb-5 group">
-                    <input type="password" name="senha" id="senha" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
-                    <label for="senha" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Senha</label>
+
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                    <img src="senha_show.png" id="img_senha" class="botão_senha" on:click={()=>{interactive_password(1)}} alt="">
+    
+                    <input 
+                      type="password" 
+                      name="senha" 
+                      id="senha" 
+                      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                      placeholder=" " 
+                      on:input={mostrar_senha_btn(1)}
+                    />
+                    <label 
+                      for="senha" 
+                      class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                      Senha
+                    </label>
                 </div>
                 
+                <div class="relative z-0 w-full mb-5 group">
+
+                    <!-- svelte-ignore a11y_click_events_have_key_events -->
+                    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                    <img src="senha_show.png" id="img_senha2" class="botão_senha" on:click={()=>{interactive_password(2)}} alt="">
+    
+                    <input 
+                      type="password" 
+                      name="confirmação_senha" 
+                      id="confirmar_senha" 
+                      class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                      placeholder=" " 
+                      on:input={mostrar_senha_btn(2)}
+                    />
+                    <label 
+                      for="confirmar_senha" 
+                      class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                      Confirmar senha 
+                    </label>
+                </div>
+
             
                 <div class="relative z-0 w-full mb-5 group">
                     <input type="tel" name="telefone" maxlength="15" on:input={formatarTelefone} value={configs.telefone} id="telefone" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
@@ -232,7 +327,36 @@
         width: 90%;
         align-items: center;
         justify-content: center;
+        position: relative;
     }
+/* estilização carregamento */
+    .carregando{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        z-index: 30;
+        align-items: center;
+    }
+
+    .loading{
+        border: 6px solid rgba(180, 175, 175, 0.63);
+        width: 100px;
+        height: 100px;
+        background-color: rgba(255, 255, 255, 0);
+        border-top-color: rgb(24, 128, 212);
+        border-radius: 50%;
+        animation: rotating 1s infinite;
+    }
+
+    @keyframes rotating{
+        to{
+            transform: rotate(1turn);
+        }
+    }
+
+/* //////////////////////////////////////////////// */
 
     .titulo{
         position: absolute;
@@ -243,7 +367,7 @@
     }
 
     .container-config{
-        display: flex;
+        display: none;
         background-color: rgba(255, 255, 255, 0.712);
         box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.301);
         border: 1px solid rgba(151, 151, 151, 0.76);
@@ -251,6 +375,8 @@
         padding: 30px;
         position: relative;
     }
+
+    
 
 
     .form-configs{
@@ -261,9 +387,38 @@
         padding-bottom: 14px;
         border-radius: 5px;
         margin-top: 15px;
-        
         margin-block: auto;
     }
+
+    .botão_senha{
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 16px;
+        width: 17px;
+        appearance: none;
+        -webkit-appearance: none; 
+        -moz-appearance: none;
+        cursor: pointer;
+    }
+
+    #senha{
+        appearance: none;
+        -webkit-appearance: none; /* Para navegadores baseados no WebKit (Safari e versões antigas do Chrome) */
+        -moz-appearance: none;
+    }
+
+    /* para tirar o botão de "mostrar senha" padrão do navegador edge */
+
+    input[type="password"]::-ms-reveal {
+        display: none;
+    }
+
+    input[type="password"]::-ms-clear { 
+        display: none; 
+    }
+    /* /////////////////////////////////////// */
+
 
     input[type="submit"]{
         width: 100%;

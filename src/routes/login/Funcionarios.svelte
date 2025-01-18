@@ -10,14 +10,7 @@
     export let nav_status;
 
     const dispatch = createEventDispatcher();
-
-
-
-
-
-    
-
-    
+   
 
     let staffs = true;
     let update_specific_data = false;

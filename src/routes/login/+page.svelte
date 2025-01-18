@@ -9,10 +9,10 @@
     const getinfo = new GetInfo();
 
     ///////////////////////////////começo da logica de navegação//////////////////////////////
+
     let info = {};
-    getinfo
-        .Show()
-        .then((x) => {
+    getinfo.Show().then((x) => {
+            document.getElementById("Carregando").style.display = "none"
             info = x;
             return info;
         })
@@ -287,11 +287,14 @@
 </script>
 
 <main>
+
+    <div id="Carregando" class="carregando"><div class="loading"></div></div>
+
     <aside>
         <nav>
 
             <div class="bem-vindo">
-                <img src={info.imagem} width="180px"style="border-radius: 99999px; display:block ;margin:auto;" alt="">
+                <img src={info.imagem} width="180px"style="border-radius: 100%; display:block ;margin:auto;" alt="">
                 <h3>{info.nome}</h3>
                 <span>{info.cpf}</span>
             </div>
@@ -349,6 +352,7 @@
             {/if}
             <!-- nav_status serve para tirar a barra de pesquisa e a quantidade de paginas, e tambem para colocar devolta quando voltar para a pagina padrão -->
             <Funcionarios
+                style="display: none;"
                 {funcionarios}
                 nav_status={() => {
                     if (funcionarios_nav_status === true) {
@@ -372,7 +376,7 @@
                             <button on:click={pagina({Num_pagina: page, departamento:valor_de_pesquisa})} > {page} </button>
                         {/each}
                     {/if}
-                    <button on:click={pagina({Num_pagina:pagina_atual + 1})} >seguinte <img src="seta-direita.png" width="10px" alt=""></button>
+                    <button on:click={pagina({Num_payarbgina:pagina_atual + 1})} >seguinte <img src="seta-direita.png" width="10px" alt=""></button>
                 </div>
             {/if}
         {/if}
@@ -390,18 +394,44 @@
         background-color: #f4f4f4;
         display: flex;
         min-height: 100vh;
+        position: relative;
+    }
+
+    .carregando{
+        height: 100%;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.664);
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        z-index: 30;
+        align-items: center;
+    }
+
+    .loading{
+        border: 6px solid rgba(180, 175, 175, 0.63);
+        width: 100px;
+        height: 100px;
+        background-color: rgba(255, 255, 255, 0);
+        border-top-color: rgb(24, 128, 212);
+        border-radius: 50%;
+        animation: rotating 1s infinite;
+    }
+
+    @keyframes rotating{
+        to{
+            transform: rotate(1turn);
+        }
     }
 
     aside{
         display: flex;
-        
         flex-direction: column;
         align-items: center;
         background-color: #f4f4f4;
         width: 260px;
         border-right: solid 1px rgba(0, 0, 0, 0.199);
         left: 0px;
-        
     }
 
     nav{
@@ -452,7 +482,6 @@
     .navigation{
         width: 83%;
         display: flex;
-
         align-items: center;
         margin: auto;
         border-radius: 5px;
@@ -476,12 +505,10 @@
         button{
             color: white;
             cursor: pointer;
-            
             background-color:rgb(212, 24, 24);
         }
         img{
             cursor: pointer;
-            
             filter: invert(1);
         }
     }
@@ -501,7 +528,6 @@
         }
         img{
             cursor: pointer;
-            
             filter: invert(1);
         }
     }
@@ -554,7 +580,6 @@
     
 
     section {
-        
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -594,7 +619,7 @@
     .numpages > button:hover{
         color: white;
         background-color: rgb(24, 128, 212);
-       img{
+        img{
             filter: invert(1);
         }
             
