@@ -385,11 +385,7 @@
         margin-block: auto;
     }
 
-    @media screen and (max-height: 900px){
-        .configurações{
-            height: auto;
-        }
-    }
+    
 
     
 </style>

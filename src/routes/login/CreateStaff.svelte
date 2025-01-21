@@ -262,12 +262,5 @@
         height: 300px;
         border-radius: 9000px;
     }
-    
-    @media screen and (max-height: 900px){
-        .container-create{
-            height: auto;
-        }
-    }
-
 
 </style>
