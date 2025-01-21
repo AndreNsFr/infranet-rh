@@ -55,7 +55,7 @@
                         <hr>
                         <div class="flex" style="gap: 5px; justify-content: space-between; overflow: hidden;"> 
                             <label style="letter-spacing:0.90px;" for="departamento">Departamento:</label>   
-                            <span id="departamento" >{funcionario.departamento}</span>
+                            <span id="departamento" class="truncate max-w-full" >{funcionario.departamento}</span>
                         </div>
                         <hr>
                         <!-- svelte-ignore a11y_no_static_element_interactions -->

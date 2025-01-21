@@ -238,8 +238,8 @@ class GetInfo {
 
                 return response.json()
             }).then((data_retornada) => {
-
-                alert(data_retornada.status)
+                // ! uso para debug
+                // alert(data_retornada.status)
 
                 
             }).catch((error) => {
@@ -323,8 +323,6 @@ class GetInfo {
 
                 return response.json()
             }).then((data) => {
-
-                alert(data.status.status)
 
                 if(data.status.error){
 
