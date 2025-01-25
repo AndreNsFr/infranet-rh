@@ -368,16 +368,18 @@
             ></Funcionarios>
 
             {#if funcionarios_nav_status}
-                <div class="numpages">
-                    <button on:click={pagina({Num_pagina:pagina_atual - 1})} ><img src="seta-esquerda.png" width="10px" alt=""> anterior</button>
-                    {#if total_pages}
-                        {#each total_pages as page}
-                            <!-- o departamento esta declarado para navegar pelas paginas dos funcionarios filtrados pelo departamento, sem isso só parece a primeira pagina -->
-                            <button on:click={pagina({Num_pagina: page, departamento:valor_de_pesquisa})} > {page} </button>
-                        {/each}
-                    {/if}
-                    <button on:click={pagina({Num_payarbgina:pagina_atual + 1})} >seguinte <img src="seta-direita.png" width="10px" alt=""></button>
-                </div>
+                {#if total_pages}
+                    <div class="numpages">
+                        <button on:click={pagina({Num_pagina:pagina_atual - 1})} ><img src="seta-esquerda.png" width="10px" alt=""> anterior</button>
+                        {#if total_pages}
+                            {#each total_pages as page}
+                                <!-- o departamento esta declarado para navegar pelas paginas dos funcionarios filtrados pelo departamento, sem isso só parece a primeira pagina -->
+                                <button on:click={pagina({Num_pagina: page, departamento:valor_de_pesquisa})} > {page} </button>
+                            {/each}
+                        {/if}
+                        <button on:click={pagina({Num_payarbgina:pagina_atual + 1})} >seguinte <img src="seta-direita.png" width="10px" alt=""></button>
+                    </div>
+                {/if}
             {/if}
         {/if}
         {#if status_Profile}
