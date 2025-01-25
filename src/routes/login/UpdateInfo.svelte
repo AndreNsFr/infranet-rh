@@ -84,19 +84,23 @@
 
     function sendNewData(event) {
         event.preventDefault();
+
         
-        let cpf = document.getElementById("cpf").value;
+        let cpf = specific_data.cpf
         let nome = document.getElementById("nome").value;
         let email = document.getElementById("email").value;
         let departamento = document.getElementById("departamento").value;
         let telefone = document.getElementById("telefone").value
         let imagem = document.getElementById("imagem").files[0];
-
+        
         getInfo
-            .VerifyActions()
-            .then((Response) => {
-                if (Response) {
-                    getInfo.UpdateInfo(cpf, nome.trim(), email.trim(), telefone.trim(), imagem,"",departamento.trim()).then();
+        .VerifyActions().then((Response) => {
+            if (Response) {
+                    document.getElementById("Loading-Cursor").style.display = "block"                
+                    getInfo.UpdateInfo(cpf, nome.trim(), email.trim(), telefone.trim(), imagem,"",departamento.trim()).then(()=>{
+                        document.getElementById("Loading-Cursor").style.display = "none"
+                        alert("Informações do funcionário atualizadas com sucesso.")
+                    });
                 }
             })
             .catch((erro) => {
@@ -119,10 +123,15 @@
     }
 </script>
 
+
+<div id="Loading-Cursor"></div>
+
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class="voltar" on:click={voltar()} ><img src="seta-esquerda.png" width="12px" style="height: 12px; margin-block: auto;"  alt="">voltar</div>
+
+
 
 <div class="configurações" >
     <div class="container-config">
@@ -266,6 +275,16 @@
 </div>
 
 <style>
+
+    #Loading-Cursor{
+        width: 100%;
+        height: 100%;
+        display: none;
+        position: absolute;
+        cursor: wait;
+        z-index: 50;
+    }
+
     .configurações {
         display: flex;
         height: 100%;

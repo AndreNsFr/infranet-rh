@@ -16,7 +16,6 @@
         valor = valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
 
         campo.value = valor
-
     }
 
 
@@ -63,13 +62,63 @@
     campo.value = valor;
 }
 
+function interactive_password(passwords){
+        if(passwords === 1){
+            let input_password = document.getElementById("senha")
+            let img_button = document.getElementById("img_senha")
+
+            if (input_password.type === "password"){
+                input_password.setAttribute("type","text")
+                img_button.src = "senha_hide.png"
+            }else{
+                input_password.setAttribute("type","password")
+                img_button.src = "senha_show.png"
+            }
+        }else if(passwords ===2){
+            let input_password = document.getElementById("confirmar_senha")
+            let img_button = document.getElementById("img_senha2")
+
+            if (input_password.type === "password"){
+                input_password.setAttribute("type","text")
+                img_button.src = "senha_hide.png"
+            }else{
+                input_password.setAttribute("type","password")
+                img_button.src = "senha_show.png"
+            }
+        }
+    }
+
+    function mostrar_senha_btn(passwords){
+        if(passwords === 1){
+            let input_password = document.getElementById("senha")
+            let img_button = document.getElementById("img_senha")
+
+            if(input_password.value == ""){
+                img_button.style.display = "none"
+            }else{
+                img_button.style.display = "block"
+            }
+        }else if(passwords === 2){
+            let input_password = document.getElementById("confirmar_senha")
+            let img_button = document.getElementById("img_senha2")
+
+            if(input_password.value == ""){
+                img_button.style.display = "none"
+            }else{
+                img_button.style.display = "block"
+            }
+        }
+    }
+
+
 
 
     function create(event) {
         event.preventDefault();
-
+        
         const nome = document.getElementById("nome").value.trim()
         const senha = document.getElementById("senha").value.trim()
+        const confirmação_da_senha = document.getElementById("confirmar_senha").value.trim()
         const departamento = document.getElementById("departamento").value.trim()
         const cpf = document.getElementById("cpf").value
         const telefone = document.getElementById("telefone").value.trim()
@@ -78,10 +127,13 @@
         const [ano, mes, dia] = data.split("-");
         let data_nas = `${dia} / ${mes} / ${ano}`;
         const imagem = document.getElementById("imagem").files[0];
-
+        
         if(/(^\d{3}\.\d{3}\.\d{3}\-\d{2}$)|(^\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2}$)/.test(cpf)){
-            getInfo
-                .CreateStaff(
+            if(senha === confirmação_da_senha){
+                
+                document.getElementById("loading-cursor").style.display = "block"
+
+                getInfo.CreateStaff(
                     nome,
                     senha,
                     departamento,
@@ -90,7 +142,15 @@
                     email,
                     data_nas,
                     imagem,
-                ).then()
+                ).then(()=>{
+                    document.getElementById("loading-cursor").style.display = "none"                  
+                    alert("Funcionário criado com sucesso.")  
+                })
+            }
+            else{
+                alert("senhas não correspondem")
+            }
+
         }else {
             alert("Cpf fora do padrão. por favor verificar.")
             document.getElementById("cpf").value = null
@@ -114,6 +174,7 @@
 </script>
 
 
+<div id="loading-cursor"></div>
 
 
 <div class="container-create">
@@ -131,8 +192,45 @@
             </div>
         
             <div class="relative z-0 w-full mb-5 group">
-                <input type="password" minlength="8" name="senha" id="senha" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                <label for="senha" class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Senha</label>
+
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                <img src="senha_show.png" id="img_senha" class="botão_senha" on:click={()=>{interactive_password(1)}} alt="">
+
+                <input 
+                  type="password" 
+                  name="senha" 
+                  id="senha" 
+                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                  placeholder=" " 
+                  on:input={mostrar_senha_btn(1)}
+                />
+                <label 
+                  for="senha" 
+                  class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Senha
+                </label>
+            </div>
+            
+            <div class="relative z-0 w-full mb-5 group">
+
+                <!-- svelte-ignore a11y_click_events_have_key_events -->
+                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+                <img src="senha_show.png" id="img_senha2" class="botão_senha" on:click={()=>{interactive_password(2)}} alt="">
+
+                <input 
+                  type="password" 
+                  name="confirmação_senha" 
+                  id="confirmar_senha" 
+                  class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer" 
+                  placeholder=" " 
+                  on:input={mostrar_senha_btn(2)}
+                />
+                <label 
+                  for="confirmar_senha" 
+                  class="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                  Confirmar senha 
+                </label>
             </div>
         
             <div class="relative z-0 w-full mb-5 group">
@@ -221,6 +319,15 @@
 
 <style>
 
+    #loading-cursor {
+        width: 100%;
+        height: 100%;
+        display: none;
+        position: absolute;
+        cursor: wait;
+        z-index: 20;
+    }
+
     .container-create{
         letter-spacing:0.90px;
     }
@@ -243,6 +350,35 @@
         border-radius: 5px;
         margin-top: 15px;
     }
+
+    .botão_senha{
+        display: none;
+        position: absolute;
+        right: 10px;
+        top: 16px;
+        width: 17px;
+        appearance: none;
+        -webkit-appearance: none; 
+        -moz-appearance: none;
+        cursor: pointer;
+    }
+
+    #senha, #confirmar_senha{
+        appearance: none;
+        -webkit-appearance: none; /* Para navegadores baseados no WebKit (Safari e versões antigas do Chrome) */
+        -moz-appearance: none;
+    }
+
+    /* para tirar o botão de "mostrar senha" padrão do navegador edge */
+
+    input[type="password"]::-ms-reveal {
+        display: none;
+    }
+
+    input[type="password"]::-ms-clear { 
+        display: none; 
+    }
+    /* /////////////////////////////////////// */
 
     .titulo{
         font-size: 18pt;

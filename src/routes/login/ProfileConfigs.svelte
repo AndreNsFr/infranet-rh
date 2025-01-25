@@ -402,7 +402,7 @@
         cursor: pointer;
     }
 
-    #senha{
+    #senha, #confirmar_senha{
         appearance: none;
         -webkit-appearance: none; /* Para navegadores baseados no WebKit (Safari e versões antigas do Chrome) */
         -moz-appearance: none;
