@@ -14,7 +14,7 @@ class GetInfo {
     }
 
     Login(email, cpf, senha) {
-        fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/auth", {
+        fetch("https://backend-infranet-rh-production.up.railway.app/auth", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: email, cpf: cpf, senha: senha }),
@@ -73,7 +73,7 @@ class GetInfo {
     }
 
     async  #Get(cpf) {
-        await fetch(`https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
+        await fetch(`https://backend-infranet-rh-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then(response => {
 
@@ -129,7 +129,7 @@ class GetInfo {
     async GetAllStaffs() {
 
 
-        await fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/staff", {
+        await fetch("https://backend-infranet-rh-production.up.railway.app/staff", {
             headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken }
         }).then((response) => {
 
@@ -217,7 +217,7 @@ class GetInfo {
 
 
         try {
-            await fetch(`https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
+            await fetch(`https://backend-infranet-rh-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify(sanitized_data)
@@ -254,7 +254,7 @@ class GetInfo {
 
     async DeleteStaff(cpf) {
         try {
-            await fetch(`https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
+            await fetch(`https://backend-infranet-rh-production.up.railway.app/funcionarios/?cpf=${cpf}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
             }).then((response) => {
@@ -292,7 +292,7 @@ class GetInfo {
 
 
         try {
-            fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/funcionarios", {
+            fetch("https://backend-infranet-rh-production.up.railway.app/funcionarios", {
                 method: "POST",
                 headers: { "Content-Type": "application/json", "Authorization": this.token, "refresh_token": this.refreshToken },
                 body: JSON.stringify({
@@ -357,7 +357,7 @@ class GetInfo {
         })
 
 
-        await fetch("https://api-rest-sistema-de-gerenciament-production.up.railway.app/auth", {
+        await fetch("https://backend-infranet-rh-production.up.railway.app/auth", {
             method: "post",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({ email: email, senha: senha, cpf: cpf })
