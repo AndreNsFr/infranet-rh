@@ -1,9 +1,9 @@
 # deploy
 
-Link: https://infranet-rh.vercel.app/
-Email: adm@gmail.com
-Cpf : 12345678910
-Senha : 12345678
+Link: https://infranet-rh.vercel.app/.
+Email: adm@gmail.com.
+Cpf : 12345678910.
+Senha : 12345678.
 
 
 # create-svelte
