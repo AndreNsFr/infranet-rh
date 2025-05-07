@@ -1,3 +1,11 @@
+# deploy
+
+Link: https://infranet-rh.vercel.app/
+Email: adm@gmail.com
+Cpf : 12345678910
+Senha : 12345678
+
+
 # create-svelte
 
 Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
