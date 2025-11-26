@@ -1,12 +1,26 @@
-# deploy
-
-Link: https://infranet-rh.vercel.app/
+# deploy login (discontinued)
 
 Email: adm@gmail.com
 
 Cpf : 12345678910
 
 Senha : 12345678
+
+**Nota sobre o Deploy:**
+
+A versão ao vivo (Live Demo) desta aplicação Full Stack (Frontend Svelte + Backend Express/TS) não está mais ativa.
+
+O Back-end (API RESTful) foi hospedado utilizando um *free tier* (plano gratuito) no Railway, que expirou e desativou o serviço.
+
+O objetivo do projeto é demonstrar a arquitetura Full Stack moderna. Para revisar a funcionalidade completa, entre em contato com o Email : andredonascimentoferreira.dev@gmail.com para um DEMO privada ou explore o código-fonte.
+
+**Deployment Note:**
+
+The live demo of this Full Stack application (Svelte Frontend + Express/TS Backend) is no longer active.
+
+The backend (RESTful API) was hosted using a free tier plan on Railway, which has expired and deactivated the service.
+
+The project's objective is to demonstrate modern Full Stack architecture. To review the complete functionality, please contact andredonascimentoferreira.dev@gmail.com for a private demo or explore the source code.
 
 
 # create-svelte
